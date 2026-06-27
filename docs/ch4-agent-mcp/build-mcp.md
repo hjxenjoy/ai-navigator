@@ -89,17 +89,11 @@ npm install @modelcontextprotocol/sdk
 
 **在 Claude Code 里配置：**
 
-```json
-// .claude/settings.json
-{
-  "mcpServers": {
-    "my-server": {
-      "command": "node",
-      "args": ["/absolute/path/to/my-mcp-server.js"]
-    }
-  }
-}
+```bash
+claude mcp add my-server -- node /absolute/path/to/my-mcp-server.js
 ```
+
+> 💡 上面用的是 SDK 的**低层 API**（`Server` + 手动注册 RequestHandler），便于你看清协议在做什么。实际项目里 SDK 还提供了更简洁的**高层 API**（`McpServer`，直接 `server.tool(name, schema, handler)` 注册工具），代码更短。两者都可用，先理解低层，再用高层提效。
 
 ---
 

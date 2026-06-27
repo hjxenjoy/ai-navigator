@@ -96,6 +96,52 @@ if (totalTokens > TOKEN_LIMIT * 0.8) {
 
 ---
 
+## 🛠️ 实战练习：写一个带记忆的命令行聊天机器人
+
+实现一个能"记住"前面对话的 CLI 聊天机器人，并加上滑动窗口防止上下文无限膨胀：
+
+```javascript
+import OpenAI from "openai"
+import readline from "node:readline/promises"
+
+const client = new OpenAI({
+  baseURL: "https://api.deepseek.com",
+  apiKey: process.env.DEEPSEEK_API_KEY
+})
+const MODEL = "deepseek-v4-flash"   // 本地可换 Ollama，见 1.9 / 1.10 节
+
+const system = { role: "system", content: "你是一个简洁的助手，回答控制在两句话内。" }
+let history = []                    // 只存 user/assistant 的来回
+const MAX_TURNS = 10                // 滑动窗口：最多保留最近 10 条
+
+const rl = readline.createInterface({ input: process.stdin, output: process.stdout })
+
+while (true) {
+  const input = await rl.question("你：")
+  if (input === "exit") break
+
+  history.push({ role: "user", content: input })
+  // 关键：system 始终保留，只对 history 做滑动窗口
+  const messages = [system, ...history.slice(-MAX_TURNS)]
+
+  const res = await client.chat.completions.create({ model: MODEL, messages })
+  const reply = res.choices[0].message.content
+  history.push({ role: "assistant", content: reply })
+  console.log("AI：" + reply)
+}
+rl.close()
+```
+
+**验证步骤：**
+1. 先告诉它"我叫张三"，过几轮再问"我叫什么名字"——它应该记得（历史在起作用）。
+2. 把 `MAX_TURNS` 改成 `2`，重复上面操作——超出窗口后它就"忘了"你的名字。
+
+**期望结果**：你能直观看到"记忆"完全是你的代码在维护，以及滑动窗口是怎么导致"忘事"的。
+
+**进阶挑战**：把滑动窗口换成"摘要压缩"——历史超过阈值时，先让模型把早期对话总结成一句话，再拼回 messages，对比两种策略的记忆效果。
+
+---
+
 ## 📌 关键结论
 
 1. AI 本身无状态，"记忆"靠你的代码维护消息历史

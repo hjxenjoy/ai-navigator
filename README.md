@@ -16,9 +16,9 @@ pnpm dev
 
 | 章节 | 核心问题 |
 |-----|---------|
-| **第 0 章** 建立正确认知 | AI 到底是什么？LLM 在做什么？它能做什么、不能做什么？ |
-| **第 1 章** LLM 工程精通 | Token、上下文、Prompt 工程、生成参数、Tool Use、成本控制 |
-| **第 2 章** 构建 AI 产品 | RAG、向量搜索、Agent 设计、**为什么 Agent 会失控**、评估方法 |
+| **第 0 章** 建立正确认知 | AI 到底是什么？LLM 在做什么？它能做什么、不能做什么？**国产大模型生态** |
+| **第 1 章** LLM 工程精通 | Token、Prompt 工程、生成参数、Tool Use、成本控制、**推理模型、多模态、OpenAI 兼容协议、本地运行（Ollama）** |
+| **第 2 章** 构建 AI 产品 | RAG（含分块策略）、向量搜索、Agent 设计、**为什么 Agent 会失控**、评估、生产环境（含可观测性） |
 | **第 3 章** 理解引擎盖下面 | Transformer 原理、训练过程、Fine-tuning vs RAG |
 | **第 4 章** MCP 与 Agent 生态 | MCP 协议、写 MCP Server、Claude Code 深度使用、Skill 与 Harness |
 | **词汇速查** | 全部 AI/工程词汇 A-Z，通俗解释 |

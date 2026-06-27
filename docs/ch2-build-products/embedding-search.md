@@ -19,6 +19,49 @@
 
 ---
 
+## Chunking（分块）：RAG 里最容易踩的坑
+
+做向量搜索前，长文档要先切成小段（Chunk）再分别 Embedding。**切得好不好，直接决定检索质量**——很多 RAG 效果差，根子在分块，不在模型。
+
+**为什么不能整篇文档塞进去：**
+- 一篇文档讲很多主题，整篇的向量是"平均味道"，对具体问题不精准
+- 检索出来要塞进 Prompt，太大既贵又稀释重点
+
+**几种分块策略：**
+
+| 策略 | 做法 | 适合 |
+|-----|-----|-----|
+| 定长切分 | 每 N 个字符/Token 切一段 | 最简单，通用兜底 |
+| 按结构切分 | 按标题、段落、Markdown 层级切 | 文档结构清晰时（最推荐） |
+| 语义切分 | 按语义边界切（一个完整意思一段） | 质量最高，但实现复杂 |
+
+**两个关键参数：**
+
+```
+Chunk Size（块大小）：每段多大。太大不精准，太小丢上下文。
+                      常见 300-800 字，按你的内容调。
+
+Overlap（重叠）：相邻块重叠一部分（比如 10-15%），
+                 避免一句话被从中间切断、两边都丢失语境。
+```
+
+```javascript
+// 最简定长 + 重叠分块
+function chunkText(text, size = 500, overlap = 80) {
+  const chunks = []
+  for (let i = 0; i < text.length; i += size - overlap) {
+    chunks.push(text.slice(i, i + size))
+  }
+  return chunks
+}
+```
+
+> ⚠️ **常见误解**：以为换个更强的 Embedding 模型就能救烂检索。多数时候，**先把分块和文档清洗做好**，收益比换模型大得多。
+
+> ⚠️ **维度一致性**：同一个向量库里的所有向量，必须用**同一个 Embedding 模型**生成（不同模型维度和语义空间都不同，不能混用）。换 Embedding 模型 = 整库重建。详见 [1.9 OpenAI 兼容协议](/ch1-llm-engineering/openai-compatible)。
+
+---
+
 ## 向量数据库
 
 向量数据库专门用来存储和搜索向量。它能在几百万个向量里，快速找到和查询向量最相近的那些。
@@ -81,12 +124,45 @@ Reranker 对这 20 个结果打分（速度慢，精度高）
 
 ---
 
+## 🛠️ 实战练习：分块大小对检索的影响
+
+拿一篇你熟悉的长文档（比如某个库的 README），用不同的 `size` 切分，做同一个查询，对比检索效果：
+
+```javascript
+// 复用 2.1 节的 embedTexts() 和 cosineSimilarity()
+const longDoc = readFileSync("./some-doc.md", "utf-8")
+const question = "怎么安装这个库？"
+
+for (const size of [200, 500, 1200]) {
+  const chunks = chunkText(longDoc, size, Math.floor(size * 0.15))
+  const chunkEmbeddings = await embedTexts(chunks)
+  const [qEmb] = await embedTexts([question])
+
+  const best = chunks
+    .map((c, i) => ({ c, score: cosineSimilarity(qEmb, chunkEmbeddings[i]) }))
+    .sort((a, b) => b.score - a.score)[0]
+
+  console.log(`\n块大小 ${size} → 最相关片段：\n`, best.c.slice(0, 120))
+}
+```
+
+**观察要点：**
+- 块太小（200）：是不是检索到的片段太零碎、缺上下文？
+- 块太大（1200）：是不是检索到一大段、里面真正相关的内容被稀释了？
+- 哪个大小对这篇文档、这个问题最合适？
+
+**进阶挑战**：给 `chunkText` 加上"按 Markdown 标题切分"，对比定长切分和按结构切分的检索质量差异。
+
+---
+
 ## 📌 关键结论
 
 1. 语义搜索理解意思而不是匹配词语，这是 RAG 的核心优势
-2. 开发阶段用 Chroma，生产环境根据需求选向量数据库
-3. 搜索质量不好时，加 Reranking 通常能显著提升
-4. Hybrid Search 结合了关键词和语义，适合需要精确匹配的场景
+2. 分块（Chunking）质量决定 RAG 效果，先调好分块再考虑换模型
+3. 同一向量库必须用同一个 Embedding 模型，换模型要整库重建
+4. 开发阶段用 Chroma，生产环境根据需求选向量数据库
+5. 搜索质量不好时，加 Reranking 通常能显著提升
+6. Hybrid Search 结合了关键词和语义，适合需要精确匹配的场景
 
 ---
 

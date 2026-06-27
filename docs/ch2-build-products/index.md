@@ -109,22 +109,35 @@ AI 根据这些内容生成回答
 # 1. 新建目录
 mkdir my-rag && cd my-rag
 npm init -y
-npm install @anthropic-ai/sdk
+npm install openai          # DeepSeek / Ollama 都用 OpenAI 兼容的这个 SDK
 
-# 2. 设置环境变量（需要两个 key）
-export ANTHROPIC_API_KEY="your-anthropic-key"   # 用于生成回答
-export OPENAI_API_KEY="your-openai-key"          # 用于 Embedding（Anthropic 目前没有 Embedding API）
+# 2. 生成回答用 DeepSeek，设置 key
+export DEEPSEEK_API_KEY="your-deepseek-key"
 
-# 3. 新建文件
+# 3. Embedding 用阿里百炼（DeepSeek 没有 Embedding API）
+export DASHSCOPE_API_KEY="your-dashscope-key"
+
+# 4. 新建文件
 touch rag.mjs  # 注意是 .mjs，使用 ES Module
 ```
 
 把下面的代码复制到 `rag.mjs`，然后运行 `node rag.mjs`：
 
 ```javascript
-import Anthropic from "@anthropic-ai/sdk"
+import OpenAI from "openai"
 
-const client = new Anthropic()
+// 生成回答：DeepSeek 云端
+const client = new OpenAI({
+  baseURL: "https://api.deepseek.com",
+  apiKey: process.env.DEEPSEEK_API_KEY
+})
+const MODEL = "deepseek-v4-flash"
+
+// 做 Embedding：阿里百炼（OpenAI 兼容接口）
+const embedClient = new OpenAI({
+  baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1",
+  apiKey: process.env.DASHSCOPE_API_KEY
+})
 
 // 模拟文档库（实际项目会从文件/数据库读取）
 const documents = [
@@ -135,19 +148,13 @@ const documents = [
 
 // 第一步：获取所有文档的 Embedding
 async function embedTexts(texts) {
-  // 注意：Anthropic 目前没有专门的 Embedding API，
-  // 通常用 OpenAI text-embedding-3-small 或 Cohere Embed
-  // 这里用 OpenAI 做示例
-  const response = await fetch("https://api.openai.com/v1/embeddings", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ model: "text-embedding-3-small", input: texts })
+  // 注意：DeepSeek 没有 Embedding API，这里用阿里百炼的 text-embedding-v4。
+  // 想离线免费可换本地 Ollama：baseURL "http://localhost:11434/v1" + model "nomic-embed-text"。
+  const response = await embedClient.embeddings.create({
+    model: "text-embedding-v4",
+    input: texts
   })
-  const data = await response.json()
-  return data.data.map(d => d.embedding)
+  return response.data.map(d => d.embedding)
 }
 
 // 计算余弦相似度
@@ -186,13 +193,13 @@ ${context}
 如果以上信息不足以回答，请如实说明。`
 
   // 5. 让 AI 生成回答
-  const response = await client.messages.create({
-    model: "claude-haiku-4-5-20251001",
+  const response = await client.chat.completions.create({
+    model: MODEL,
     max_tokens: 512,
     messages: [{ role: "user", content: prompt }]
   })
 
-  return response.content[0].text
+  return response.choices[0].message.content
 }
 
 // 测试

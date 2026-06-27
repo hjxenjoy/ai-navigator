@@ -29,6 +29,7 @@ export default defineConfig({
           { text: '0.2 LLM 在做什么事', link: '/ch0-mindset/what-llm-does' },
           { text: '0.3 AI 能做什么，不能做什么', link: '/ch0-mindset/capabilities' },
           { text: '0.4 当前技术版图', link: '/ch0-mindset/landscape' },
+          { text: '0.5 国产大模型生态', link: '/ch0-mindset/china-llm' },
         ],
       },
       {
@@ -41,6 +42,10 @@ export default defineConfig({
           { text: '1.4 Tool Use 深度使用', link: '/ch1-llm-engineering/tool-use' },
           { text: '1.5 多轮对话与状态管理', link: '/ch1-llm-engineering/conversation' },
           { text: '1.6 流式输出与成本控制', link: '/ch1-llm-engineering/streaming-cost' },
+          { text: '1.7 推理模型与思考模式', link: '/ch1-llm-engineering/reasoning-models' },
+          { text: '1.8 多模态：图像与文档输入', link: '/ch1-llm-engineering/multimodal' },
+          { text: '1.9 OpenAI 兼容协议与多模型切换', link: '/ch1-llm-engineering/openai-compatible' },
+          { text: '1.10 在本地跑模型（Ollama）', link: '/ch1-llm-engineering/local-models' },
         ],
       },
       {

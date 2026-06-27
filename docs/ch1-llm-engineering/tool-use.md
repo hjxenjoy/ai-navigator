@@ -68,21 +68,29 @@ AI 靠 description 来判断什么时候该用这个工具。描述要清楚说�
 ## 完整代码示例（Node.js）
 
 ```javascript
-import Anthropic from "@anthropic-ai/sdk"
+import OpenAI from "openai"
 
-const client = new Anthropic()
+// 默认 DeepSeek 云端；本地 Ollama 切换方式见 1.4 节注释
+const client = new OpenAI({
+  baseURL: "https://api.deepseek.com",
+  apiKey: process.env.DEEPSEEK_API_KEY
+})
+const MODEL = "deepseek-v4-flash"   // 本地可换 "qwen2.5:14b"（qwen 支持工具调用，gemma 不一定支持）
 
-// 工具定义
+// 工具定义（OpenAI 兼容格式：用 type/function 包一层，参数字段叫 parameters）
 const tools = [
   {
-    name: "get_user",
-    description: "根据用户 ID 从数据库查询用户信息",
-    input_schema: {
-      type: "object",
-      properties: {
-        user_id: { type: "string", description: "用户的唯一 ID" }
-      },
-      required: ["user_id"]
+    type: "function",
+    function: {
+      name: "get_user",
+      description: "根据用户 ID 从数据库查询用户信息",
+      parameters: {
+        type: "object",
+        properties: {
+          user_id: { type: "string", description: "用户的唯一 ID" }
+        },
+        required: ["user_id"]
+      }
     }
   }
 ]
@@ -96,41 +104,35 @@ async function chat(userMessage) {
   const messages = [{ role: "user", content: userMessage }]
 
   while (true) {
-    const response = await client.messages.create({
-      model: "claude-sonnet-4-6",
+    const response = await client.chat.completions.create({
+      model: MODEL,
       max_tokens: 1024,
       tools,
       messages
     })
 
-    // AI 完成了，返回最终回复
-    if (response.stop_reason === "end_turn") {
-      return response.content[0].text
+    const msg = response.choices[0].message
+
+    // AI 没有要调用工具，返回最终回复
+    if (!msg.tool_calls) {
+      return msg.content
     }
 
-    // AI 要调用工具
-    if (response.stop_reason === "tool_use") {
-      // 把 AI 的回复加入消息历史
-      messages.push({ role: "assistant", content: response.content })
+    // AI 要调用工具：先把它这条回复（含 tool_calls）加入消息历史
+    messages.push(msg)
 
-      // 执行所有工具调用
-      const toolResults = []
-      for (const block of response.content) {
-        if (block.type === "tool_use") {
-          let result
-          if (block.name === "get_user") {
-            result = getUserFromDB(block.input.user_id)
-          }
-          toolResults.push({
-            type: "tool_result",
-            tool_use_id: block.id,
-            content: JSON.stringify(result)
-          })
-        }
+    // 执行所有工具调用，把每个结果作为一条 role:"tool" 消息加回历史
+    for (const call of msg.tool_calls) {
+      let result
+      if (call.function.name === "get_user") {
+        const args = JSON.parse(call.function.arguments)  // 参数是 JSON 字符串，要先解析
+        result = getUserFromDB(args.user_id)
       }
-
-      // 把工具结果返回给 AI
-      messages.push({ role: "user", content: toolResults })
+      messages.push({
+        role: "tool",
+        tool_call_id: call.id,
+        content: JSON.stringify(result)
+      })
     }
   }
 }
@@ -152,15 +154,48 @@ console.log(result)
 只输出 JSON，不要有其他文字。
 ```
 
-**方式二：使用 JSON Mode（部分模型支持）**
-```javascript
-// OpenAI 的写法
-{ response_format: { type: "json_object" } }
+**方式二：JSON Mode —— 强制输出合法 JSON**
 
-// 某些模型支持 JSON Schema 约束输出格式
+在 OpenAI 兼容协议里加 `response_format`，模型会保证输出是能 `JSON.parse` 的合法 JSON：
+
+```javascript
+const res = await client.chat.completions.create({
+  model: MODEL,
+  // 提示里仍要说明你要的字段，并出现 "json" 字样
+  messages: [{ role: "user", content: "提取这句话里的人名和年龄，用 JSON 返回：张三今年28岁" }],
+  response_format: { type: "json_object" }
+})
+const data = JSON.parse(res.choices[0].message.content)  // { name: "张三", age: 28 }
 ```
 
-> ⚠️ 即使用了 JSON Mode，也要做 JSON.parse 的 try-catch，AI 偶尔还是会输出不合法的 JSON。
+**方式三：JSON Schema —— 连字段结构都锁死（更强，部分模型支持）**
+
+不只是"合法 JSON"，而是强制符合你给的结构（字段名、类型、必填项都不会跑偏）：
+
+```javascript
+response_format: {
+  type: "json_schema",
+  json_schema: {
+    name: "user_info",
+    strict: true,
+    schema: {
+      type: "object",
+      properties: {
+        name: { type: "string" },
+        age: { type: "number" },
+        tags: { type: "array", items: { type: "string" } }
+      },
+      required: ["name", "age"],
+      additionalProperties: false
+    }
+  }
+}
+```
+
+> ⚠️ 三点注意：
+> 1. **务必 try-catch `JSON.parse`**——即使开了 JSON Mode，极端情况（如被 `max_tokens` 截断）仍可能拿到半截 JSON。
+> 2. **不是所有模型/厂商都支持 `json_schema`**，但 `json_object` 支持面较广；本地小模型可能两者都不支持，只能靠 Prompt 约束 + 解析兜底。
+> 3. JSON Mode 解决"格式对不对"，解决不了"内容对不对"——字段值仍可能是幻觉。
 
 ---
 
@@ -186,14 +221,17 @@ console.log(result)
 1. 在 `tools` 数组里新增工具定义：
 ```javascript
 {
-  name: "list_users",
-  description: "查询系统中所有用户的列表，返回 id 和 username",
-  input_schema: {
-    type: "object",
-    properties: {
-      limit: {
-        type: "number",
-        description: "最多返回多少个用户，默认 10"
+  type: "function",
+  function: {
+    name: "list_users",
+    description: "查询系统中所有用户的列表，返回 id 和 username",
+    parameters: {
+      type: "object",
+      properties: {
+        limit: {
+          type: "number",
+          description: "最多返回多少个用户，默认 10"
+        }
       }
     }
   }
@@ -202,8 +240,8 @@ console.log(result)
 
 2. 在工具执行逻辑里加上处理：
 ```javascript
-if (block.name === "list_users") {
-  const limit = block.input.limit || 10
+if (call.function.name === "list_users") {
+  const limit = JSON.parse(call.function.arguments).limit || 10
   result = [
     { id: "user_001", username: "张三" },
     { id: "user_002", username: "李四" },

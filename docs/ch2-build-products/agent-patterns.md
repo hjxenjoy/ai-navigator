@@ -132,6 +132,46 @@ Agent 处理
 
 ---
 
+## 🛠️ 实战练习：写一个最小 ReAct Agent
+
+基于 [1.4 Tool Use](/ch1-llm-engineering/tool-use) 的循环，做一个能自主多步调用工具的 Agent。给它两个工具，让它回答"北京今天适不适合户外活动"——它需要先查天气，再据此判断：
+
+```javascript
+// 复用 1.4 节的 client / MODEL / 工具调用循环
+const tools = [
+  {
+    type: "function",
+    function: {
+      name: "get_weather",
+      description: "查询某个城市当前天气",
+      parameters: {
+        type: "object",
+        properties: { city: { type: "string" } },
+        required: ["city"]
+      }
+    }
+  }
+]
+
+function getWeather(city) {
+  // 模拟数据，真实项目接天气 API
+  return { city, temp: 25, condition: "晴", uv: 6 }
+}
+
+// Agent 循环：模型自己决定 何时调工具、何时给最终答案
+// （把 1.4 节 chat() 里的 get_user 换成 get_weather 即可）
+const answer = await chat("北京今天适不适合户外活动？")
+console.log(answer)
+```
+
+**观察要点：**
+- 模型是不是**先**调用了 `get_weather`，拿到结果后**才**给建议？（这就是"思考-行动-观察"循环）
+- 打印每一轮的 `messages`，看历史是怎么一步步增长的。
+
+**进阶挑战**：再加一个 `get_air_quality` 工具，问一个需要**连续调用两个工具**的问题（先查天气再查空气质量），观察 Agent 如何自主决定调用顺序。
+
+---
+
 ## 📌 关键结论
 
 1. Agentic Loop（ReAct）是 Agent 的基本模式：思考-行动-观察循环

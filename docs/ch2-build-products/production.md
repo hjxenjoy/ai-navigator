@@ -8,15 +8,15 @@ AI API 会报错。网络超时、Rate Limit、模型过载，都会发生。
 
 ```javascript
 // ❌ 没有错误处理
-const response = await client.messages.create({ ... })
+const response = await client.chat.completions.create({ ... })
 
 // ✅ 基本错误处理
 async function callAI(params, maxRetries = 3) {
   for (let i = 0; i < maxRetries; i++) {
     try {
-      return await client.messages.create(params)
+      return await client.chat.completions.create(params)
     } catch (error) {
-      if (error.status === 429 || error.status === 529) {
+      if (error.status === 429 || error.status === 503) {
         // Rate limit 或服务过载，等待后重试
         await sleep(Math.pow(2, i) * 1000)
       } else if (error.status === 400) {
@@ -64,7 +64,7 @@ AI API 费用可以增长很快，特别是：
 模型版本更新后，同样的 Prompt 输出可能有变化。有时候是变好了，有时候是你依赖的某个特定行为不再出现。
 
 建议：
-- 在代码里明确固定模型版本（如 `claude-sonnet-4-6` 而不是 `claude-latest`）
+- 在代码里明确固定模型版本（用具体版本号，而不是 `latest` 这类会自动跟着升级的别名）
 - 升级模型版本前，跑一遍评估集对比
 
 ## 坑六：没有日志
@@ -75,20 +75,63 @@ AI API 费用可以增长很快，特别是：
 ```javascript
 async function callAIWithLog(params) {
   const startTime = Date.now()
-  const response = await client.messages.create(params)
+  const response = await client.chat.completions.create(params)
   
   console.log(JSON.stringify({
     timestamp: new Date().toISOString(),
     model: params.model,
-    inputTokens: response.usage.input_tokens,
-    outputTokens: response.usage.output_tokens,
+    inputTokens: response.usage.prompt_tokens,
+    outputTokens: response.usage.completion_tokens,
     latencyMs: Date.now() - startTime,
-    stopReason: response.stop_reason
+    finishReason: response.choices[0].finish_reason
   }))
   
   return response
 }
 ```
+
+---
+
+## 坑七：没有可观测性，线上全靠猜
+
+单条日志能帮你查单次请求，但 AI 系统上了量之后，你需要回答的是**趋势性**问题：
+
+- 哪个功能在烧钱？token 花在哪了？
+- 最近回答质量是不是下降了？
+- 一个 Agent 任务到底调了几次模型、走了哪条路径？
+- 平均延迟、失败率、限流频率是多少？
+
+这就是 **可观测性（Observability）**——把每次调用的输入、输出、token、延迟、模型、错误都结构化记录下来，能聚合、能追溯。
+
+**两种做法：**
+
+1. **自己记到数据库 / 日志系统**：在统一的 `callAI` 封装里（见坑六），把每次调用写一条结构化记录，配上看板（按天/按功能聚合 token 和成本）。简单可控。
+
+2. **用专门的 LLM 可观测工具**：如 Langfuse（可自托管）、LangSmith、Helicone 等。它们专门为 AI 调用设计，能把一次 Agent 任务的**多步调用串成一条链路（Trace）**，可视化每一步的输入输出和耗时——调试多步 Agent 时尤其有用。
+
+```javascript
+// 最小自建版：每次调用落一条结构化记录
+async function callAITracked(params, meta) {
+  const start = Date.now()
+  try {
+    const res = await client.chat.completions.create(params)
+    await logTrace({
+      feature: meta.feature,                       // 哪个功能调的
+      model: params.model,
+      inputTokens: res.usage.prompt_tokens,
+      outputTokens: res.usage.completion_tokens,
+      latencyMs: Date.now() - start,
+      ok: true
+    })
+    return res
+  } catch (e) {
+    await logTrace({ feature: meta.feature, model: params.model, ok: false, error: e.message })
+    throw e
+  }
+}
+```
+
+> 💡 关键是**带上业务维度**（哪个功能、哪个用户），否则只有一堆 token 数字，定位不到"谁在烧钱、哪里变慢"。
 
 ---
 
@@ -98,6 +141,7 @@ async function callAIWithLog(params) {
 2. AI 延迟和普通 API 不同，超时设置要调整
 3. 明确固定模型版本，模型升级要主动测试
 4. 日志是出问题时唯一的线索，从第一天就要记
+5. 上量后要有可观测性：结构化记录每次调用，带业务维度，多步 Agent 用 Trace 串起来
 
 ---
 

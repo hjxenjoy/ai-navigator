@@ -114,19 +114,30 @@ stopSequences: ["###"]
 用同一个 Prompt，分别用不同 Temperature 调用 API，观察输出差异：
 
 ```javascript
-import Anthropic from "@anthropic-ai/sdk"
-const client = new Anthropic()
+import OpenAI from "openai"
+
+// —— 后端配置（换模型/换服务只改这里）——
+// 默认：DeepSeek 云端 API
+const client = new OpenAI({
+  baseURL: "https://api.deepseek.com",
+  apiKey: process.env.DEEPSEEK_API_KEY
+})
+const MODEL = "deepseek-v4-flash"
+
+// 替代方案：本地 Ollama（先运行 `ollama serve`，完全离线免费）
+// const client = new OpenAI({ baseURL: "http://localhost:11434/v1", apiKey: "ollama" })
+// const MODEL = "qwen2.5:14b"   // 或 "gemma4:12b"
 
 const prompt = "给我写一个函数名，这个函数的作用是：把用户列表按注册时间排序"
 
 async function testTemperature(temp) {
-  const response = await client.messages.create({
-    model: "claude-haiku-4-5-20251001",
+  const response = await client.chat.completions.create({
+    model: MODEL,
     max_tokens: 50,
     temperature: temp,
     messages: [{ role: "user", content: prompt }]
   })
-  console.log(`Temperature ${temp}: ${response.content[0].text.trim()}`)
+  console.log(`Temperature ${temp}: ${response.choices[0].message.content.trim()}`)
 }
 
 // 跑5次，每次用不同的 temperature
@@ -135,7 +146,7 @@ for (const temp of [0, 0.3, 0.7, 1.0, 1.5]) {
 }
 ```
 
-**运行之前准备**：确保设置了环境变量 `ANTHROPIC_API_KEY`。
+**运行之前准备**：先 `npm install openai`，再设置环境变量 `DEEPSEEK_API_KEY`（用本地 Ollama 则不需要 key）。DeepSeek 和 Ollama 都兼容 OpenAI 协议，所以同一份代码只要改最上面的 `baseURL` 和 `MODEL` 就能在云端和本地间切换。
 
 **观察要点**：
 - Temperature = 0 时，多次运行是否总是同一个答案？

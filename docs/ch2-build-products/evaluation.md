@@ -50,13 +50,13 @@ AI 回答：${aiAnswer}
 
 只输出一个数字。`
 
-  const response = await client.messages.create({
-    model: "claude-haiku-4-5-20251001",  // 用便宜的模型评估
+  const response = await client.chat.completions.create({
+    model: MODEL,  // 用便宜的模型评估，DeepSeek 已经足够便宜
     max_tokens: 10,
     messages: [{ role: "user", content: judgePrompt }]
   })
   
-  return parseInt(response.content[0].text)
+  return parseInt(response.choices[0].message.content)
 }
 ```
 
@@ -95,19 +95,27 @@ const testCases = [
 **第二步：自动化运行评估**
 
 ```javascript
-import Anthropic from "@anthropic-ai/sdk"
+import OpenAI from "openai"
 
-const client = new Anthropic()
+// 默认 DeepSeek 云端；本地 Ollama 切换方式见 1.4 节注释
+const client = new OpenAI({
+  baseURL: "https://api.deepseek.com",
+  apiKey: process.env.DEEPSEEK_API_KEY
+})
+const MODEL = "deepseek-v4-flash"   // 本地可换 "qwen2.5:14b" 或 "gemma4:12b"
 
 // 封装 AI 调用
 async function askAI(question) {
-  const response = await client.messages.create({
-    model: "claude-haiku-4-5-20251001",
+  const response = await client.chat.completions.create({
+    model: MODEL,
     max_tokens: 512,
-    system: "你是一个客服助手，根据公司政策回答用户问题。退款政策：购买后7天内可申请，3-5个工作日退回。",
-    messages: [{ role: "user", content: question }]
+    // OpenAI 兼容协议里，system 提示作为 messages 数组的第一条
+    messages: [
+      { role: "system", content: "你是一个客服助手，根据公司政策回答用户问题。退款政策：购买后7天内可申请，3-5个工作日退回。" },
+      { role: "user", content: question }
+    ]
   })
-  return response.content[0].text
+  return response.choices[0].message.content
 }
 
 async function runEvaluation(testCases) {

@@ -12,21 +12,23 @@
 **Node.js 实现：**
 
 ```javascript
-const stream = await client.messages.stream({
-  model: "claude-sonnet-4-6",
+// client/MODEL 的配置见 1.4 节（默认 DeepSeek，可切本地 Ollama）
+const stream = await client.chat.completions.create({
+  model: MODEL,
   max_tokens: 1024,
+  stream: true,
   messages: [{ role: "user", content: "写一首诗" }]
 })
 
 // 方式一：逐 Token 处理
+let full = ""
 for await (const chunk of stream) {
-  if (chunk.type === "content_block_delta") {
-    process.stdout.write(chunk.delta.text)
+  const text = chunk.choices[0]?.delta?.content
+  if (text) {
+    process.stdout.write(text)
+    full += text   // 方式二：自己累加，得到完整文本
   }
 }
-
-// 方式二：等待完整文本
-const message = await stream.finalMessage()
 ```
 
 **在 Web 项目里用 SSE（Server-Sent Events）：**
@@ -37,11 +39,12 @@ app.get("/chat", async (req, res) => {
   res.setHeader("Content-Type", "text/event-stream")
   res.setHeader("Cache-Control", "no-cache")
 
-  const stream = await client.messages.stream({ ... })
+  const stream = await client.chat.completions.create({ model: MODEL, stream: true, messages: [...] })
 
   for await (const chunk of stream) {
-    if (chunk.type === "content_block_delta") {
-      res.write(`data: ${JSON.stringify({ text: chunk.delta.text })}\n\n`)
+    const text = chunk.choices[0]?.delta?.content
+    if (text) {
+      res.write(`data: ${JSON.stringify({ text })}\n\n`)
     }
   }
   res.end()
@@ -69,29 +72,29 @@ System Prompt 每次请求都会作为输入 Token 计费。一个 2000 Token �
 
 **2. 利用 Prompt Caching（KV Cache）**
 
-当你的 System Prompt 很长但很固定，可以启用缓存。被缓存的 Token 后续请求只按很低的价格计费。
+当你的 System Prompt 很长但很固定，可以利用缓存。被缓存的 Token 后续请求只按很低的价格计费。
+
+不同厂商的开启方式不一样：
+- **DeepSeek / OpenAI**：自动缓存（Context Caching），你不用写任何特殊代码，只要每次请求开头的内容保持一致（比如把固定的 System Prompt 放在最前面），命中缓存的部分就会自动按更低的价格计费。
+- **Anthropic Claude**：需要手动在内容块上标记 `cache_control: { type: "ephemeral" }`。
 
 ```javascript
-// Anthropic 的缓存写法
-{
-  role: "user",
-  content: [
-    {
-      type: "text",
-      text: "这是一个很长的系统提示...",
-      cache_control: { type: "ephemeral" }  // 标记为可缓存
-    }
-  ]
-}
+// 用 DeepSeek 时，把固定内容放在最前面即可，缓存自动生效
+const messages = [
+  { role: "system", content: "这是一个很长且固定的系统提示..." },  // 这部分会被自动缓存
+  { role: "user", content: userQuestion }                          // 只有这部分每次变化
+]
 ```
 
 **3. 选对模型**
 
-| 任务 | 推荐模型 | 原因 |
-|-----|---------|------|
-| 简单问答、分类 | Haiku / Flash | 便宜 10-50 倍，够用 |
-| 复杂代码、推理 | Sonnet / GPT-4o | 性价比好 |
-| 极复杂任务 | Opus / o1 | 能力最强，也最贵 |
+| 任务 | 该用哪档模型 | 举例 | 原因 |
+|-----|---------|------|------|
+| 简单问答、分类、改写 | 小/快档 | DeepSeek-V4-flash、Qwen-flash、本地 Ollama | 便宜十几到几十倍，够用 |
+| 复杂代码、长文档 | 标准/强档 | DeepSeek-V4-pro、Qwen-plus | 性价比好 |
+| 多步推理、难题 | 推理模型 | 见 [1.7 推理模型](./reasoning-models) | 准确率高，但慢且贵，别滥用 |
+
+> 选型的核心不是"哪个模型最强"，而是"这个任务最低用哪档就够"。默认用便宜的，搞不定再往上加。
 
 **4. 控制输出长度**
 
@@ -146,4 +149,4 @@ async function callWithRetry(fn, maxRetries = 3) {
 
 ---
 
-第 1 章完成。下一步：[第 2 章 · 构建 AI 产品](/ch2-build-products/)
+下一节：[1.7 推理模型与思考模式](./reasoning-models)
