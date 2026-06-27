@@ -114,4 +114,4 @@ AI 不是万能。出现这些信号，果断接管：
 
 ---
 
-第 4 章完成。下一步：[跟上 AI 前沿](/keep-current/)
+下一节：[4.8 Agent = Model + Harness：脚手架工程](./harness-engineering)

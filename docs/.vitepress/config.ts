@@ -116,6 +116,8 @@ export default withPwa(defineConfig({
           { text: '4.5 Skill 与 Harness 机制', link: '/ch4-agent-mcp/skill-harness' },
           { text: '4.6 多 Agent 协作', link: '/ch4-agent-mcp/multi-agent' },
           { text: '4.7 AI 编程实战工作流', link: '/ch4-agent-mcp/ai-coding-workflow' },
+          { text: '4.8 Agent = Model + Harness', link: '/ch4-agent-mcp/harness-engineering' },
+          { text: '4.9 上下文工程', link: '/ch4-agent-mcp/context-engineering' },
         ],
       },
       {
