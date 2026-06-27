@@ -148,6 +148,48 @@ SFT 阶段的训练数据风格 + RLHF 阶段标注者的偏好。→ [3.3](/ch3
 project 作用域 → 项目根目录的 `.mcp.json`，提交进 Git。→ [4.2](/ch4-agent-mcp/use-mcp)
 </details>
 
+**Q19. "Agent = Model + Harness" 这个公式想说明什么？**
+
+<details><summary>看答案</summary>
+
+Agent 不只是模型，而是"模型 + 外面那层脚手架"，表现一大半来自 Harness。所以调 Agent 常常是在调脚手架，而不是换更强的模型。→ [4.8](/ch4-agent-mcp/harness-engineering)
+</details>
+
+**Q20. 工具调用报错了，Harness 正确的处理方式是？为什么有效？**
+
+<details><summary>看答案</summary>
+
+把**完整的错误信息/栈**喂回给模型，让它自己看着改（Error Recovery）。有效是因为模型很擅长根据具体报错修正自己的参数；只说"失败了"它只能瞎猜。→ [4.8](/ch4-agent-mcp/harness-engineering)
+</details>
+
+**Q21. "补偿性代码（Compensatory Code）"是干嘛的？举两个例子。**
+
+<details><summary>看答案</summary>
+
+替模型兜底、补它短板的确定性代码——模型负责"聪明"，它负责"靠谱"。例如：用代码精确计数/计算（模型算不准）、JSON schema 强制校验（模型偶尔输出非法 JSON）、权限门禁（拦住危险操作）。→ [4.8](/ch4-agent-mcp/harness-engineering)
+</details>
+
+**Q22. 上下文工程的目标是"把上下文窗口塞满"吗？**
+
+<details><summary>看答案</summary>
+
+不是。目标是**每一步只放此刻最该看的东西**。桌子（窗口）大也要会收拾——塞太多反而稀释重点、"中间迷失"。→ [4.9](/ch4-agent-mcp/context-engineering)
+</details>
+
+**Q23. 上下文工程的三大手法是什么？各用一句话。**
+
+<details><summary>看答案</summary>
+
+①按需注入：用时才把指令/工具/资料放上桌，用完撤走；②压缩（Compaction）：旧内容摘成便签、原件收走腾 token；③隔离：子任务在独立上下文里跑，只把结论带回主线程。→ [4.9](/ch4-agent-mcp/context-engineering)
+</details>
+
+**Q24. 长任务里 Agent "把前面说的忘了"，对照上下文工程，可能怎么解决？**
+
+<details><summary>看答案</summary>
+
+重要信息别只埋在对话历史里（会被压缩掉）→ 放进 System Prompt / 文件 / 计划清单；或把大任务拆成多个干净的小对话 + 用隔离。→ [4.9](/ch4-agent-mcp/context-engineering)
+</details>
+
 ---
 
 下一页：[决策速查](./decisions)
