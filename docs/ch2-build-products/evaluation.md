@@ -1,0 +1,147 @@
+# 2.5 AI 系统的评估方法
+
+大多数人做 AI 功能的流程是：写 Prompt → 测一下 → 感觉还行 → 上线。
+
+这是不够的。**没有评估，你无法知道你的改动是真的变好了还是变差了。**
+
+## 为什么评估很重要
+
+改了一个 Prompt，你靠什么判断它变好了？
+- 手动测了 3 个例子感觉好一点？→ 可能是幸存者偏差
+- 上线后用户反馈好了？→ 太慢了，而且可能有其他因素
+
+**Eval（评估）** 是让这个判断变得可靠和可重复的方法。
+
+---
+
+## 什么是 Ground Truth
+
+Ground Truth 是"正确答案"的基准。
+
+在评估 AI 系统时，你需要有一批样本，每个样本都知道"正确的输出是什么"，然后让 AI 跑这些样本，看它有多少是对的。
+
+```
+样本: "退款流程是什么？"
+Ground Truth: "退款需要在购买后 7 天内申请，3-5 个工作日到账"
+AI 输出: "退款需要在7天内提交申请，一般3至5天退回。"
+→ 对比，判断是否正确
+```
+
+---
+
+## LLM-as-Judge
+
+当输出不是对/错这么简单（比如写的文章好不好，回答是否有帮助），用人工打分成本太高。
+
+**LLM-as-Judge** 是用另一个（通常更强的）AI 模型来评判输出质量。
+
+```javascript
+async function evaluateResponse(question, aiAnswer, groundTruth) {
+  const judgePrompt = `你是一个严格的评估者。
+  
+用户问题：${question}
+参考答案：${groundTruth}
+AI 回答：${aiAnswer}
+
+请评估 AI 回答的质量（1-5分）：
+1分：完全错误或有害
+3分：部分正确，有明显缺失
+5分：完全正确，表达清晰
+
+只输出一个数字。`
+
+  const response = await client.messages.create({
+    model: "claude-haiku-4-5-20251001",  // 用便宜的模型评估
+    max_tokens: 10,
+    messages: [{ role: "user", content: judgePrompt }]
+  })
+  
+  return parseInt(response.content[0].text)
+}
+```
+
+---
+
+## Benchmark 是什么
+
+Benchmark 是一套标准化的测试集，用来对比不同模型或不同版本的能力。
+
+你经常会看到：
+- **MMLU**：测试模型的通用知识，几十个领域的题目
+- **HumanEval**：测试代码生成能力
+- **GSM8K**：测试数学推理能力
+
+这些是评估模型本身的基准。对你更有用的是**为你的具体场景建立自己的评估集**。
+
+---
+
+## 为你的项目建立评估体系
+
+**第一步：收集真实的测试案例**
+
+从用户真实提问里取样，或者手动创建覆盖不同情况的测试案例。
+
+```javascript
+const testCases = [
+  {
+    input: "怎么申请退款",
+    expectedKeywords: ["7天", "退款", "申请"],
+    shouldNotContain: ["联系客服"]  // 不应该让用户打电话
+  },
+  // ... 更多测试案例
+]
+```
+
+**第二步：自动化运行评估**
+
+```javascript
+async function runEvaluation(testCases) {
+  const results = []
+  for (const tc of testCases) {
+    const response = await askAI(tc.input)
+    const passed = tc.expectedKeywords.every(kw => response.includes(kw))
+      && !tc.shouldNotContain.some(kw => response.includes(kw))
+    results.push({ ...tc, response, passed })
+  }
+  
+  const passRate = results.filter(r => r.passed).length / results.length
+  console.log(`通过率: ${(passRate * 100).toFixed(1)}%`)
+  return results
+}
+```
+
+**第三步：每次改动后都跑评估**
+
+改了 Prompt？改了检索策略？跑一遍评估，看数字变好了还是变差了。
+
+---
+
+## Precision 和 Recall（精准率和召回率）
+
+这两个词在评估检索系统（RAG）时很常用：
+
+- **Precision（精准率）**：你找到的结果里，有多少是真正相关的？
+- **Recall（召回率）**：所有相关结果里，你找到了多少？
+
+```
+真实相关文档: [A, B, C, D, E]
+你的系统找到: [A, B, F, G]（F和G不相关）
+
+Precision = 2/4 = 50%（找到的4个里，2个真正相关）
+Recall    = 2/5 = 40%（5个相关文档里，找到了2个）
+```
+
+两者是有取舍的：提高精准率往往会降低召回率，反之亦然。
+
+---
+
+## 📌 关键结论
+
+1. 没有评估，你无法可靠地判断改动是否有效
+2. 建立自己的测试集，自动化运行，每次改动后对比数字
+3. LLM-as-Judge 是评估开放式输出质量的高效方法
+4. RAG 系统重点看 Precision 和 Recall
+
+---
+
+下一节：[2.6 生产环境的坑](./production)
