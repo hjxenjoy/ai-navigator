@@ -1,0 +1,111 @@
+# 决策速查
+
+把散在各章的"该用哪个"判断题集中到一页，做选择时直接查。
+
+---
+
+## RAG vs Fine-tuning vs Prompt
+
+```
+任务需要动态/实时知识（文档、价格、用户数据）？
+  ├─ 是 → RAG（或 Tool Use 查实时数据）
+  └─ 否 ↓
+
+需要固定的风格/格式/重复性任务，且有足够标注数据（几百~几千）？
+  ├─ 是 → Fine-tuning
+  └─ 否 ↓
+
+Prompt Engineering 能解决吗？
+  ├─ 能 → 用 Prompt（最便宜，先试这个）
+  └─ 不能 → 回头看是不是数据/任务设计问题
+```
+
+> 铁律：别用 Fine-tune 注入知识（那是 RAG 的活）；永远先把 Prompt 做到位。→ [3.4](/ch3-under-the-hood/finetuning-vs-rag)
+
+---
+
+## 普通模型 vs 推理模型
+
+| 任务 | 选 |
+|-----|----|
+| 简单问答、分类、改写、翻译 | 普通模型（小/快档） |
+| 实时交互、聊天、补全 | 普通模型 |
+| 大批量低难度处理 | 普通模型（推理模型又慢又贵） |
+| 多步数学/逻辑、复杂代码、难题 | 推理模型 |
+| 普通模型反复答错 | 推理模型 |
+
+> 默认普通模型，搞不定再上推理模型。→ [1.7](/ch1-llm-engineering/reasoning-models)
+
+---
+
+## 本地（Ollama）vs 云端 API
+
+| 你更看重 | 选 |
+|---------|----|
+| 数据隐私 / 离线 / 零调用成本 / 随便折腾 | 本地 |
+| 最强能力 / 高并发 / 省心稳定 | 云端 |
+
+> 常见组合：开发调试用本地，生产上线用云端（靠 OpenAI 兼容协议无缝切换）。→ [1.10](/ch1-llm-engineering/local-models)
+
+---
+
+## 选哪个模型档位（成本优先）
+
+```
+能用小/快档（DeepSeek-flash、本地）就别用大的
+  → 简单问答、分类、改写
+
+不够再上标准/强档（DeepSeek-pro、Qwen-plus）
+  → 复杂代码、长文档
+
+最后才考虑推理模型
+  → 真正的难题（贵且慢）
+```
+
+→ [1.6](/ch1-llm-engineering/streaming-cost)
+
+---
+
+## 国产模型怎么选
+
+| 需求 | 选 |
+|-----|----|
+| 默认主力（便宜、代码强） | DeepSeek |
+| 要 Embedding / 多模态 | 阿里百炼（通义） |
+| 要更强推理 | 智谱 GLM |
+| 要更低价格 | 豆包 |
+| 不想管多账号 | 聚合平台（硅基流动 / OpenRouter） |
+
+→ [0.5](/ch0-mindset/china-llm)
+
+---
+
+## 单 Agent vs 多 Agent
+
+```
+任务能并行 / 上下文不够 / 需要专业分工 / 需要互相检验？
+  ├─ 是 → 多 Agent（Orchestrator-Subagent）
+  └─ 否 → 单 Agent
+
+任务本身是顺序的，或很简单？
+  → 单 Agent（多 Agent 只会增加复杂度）
+```
+
+> 从单 Agent 开始，按需引入。→ [4.6](/ch4-agent-mcp/multi-agent)
+
+---
+
+## 输出格式怎么控
+
+| 需求 | 方式 |
+|-----|------|
+| 大致结构 | 在 Prompt 里说清楚 + 给例子 |
+| 必须是合法 JSON | `response_format: { type: "json_object" }` |
+| 连字段结构都锁死 | `json_schema` + `strict`（部分模型支持） |
+| 本地小模型 | 多半只能 Prompt 约束 + 解析兜底 |
+
+> 无论哪种都要 try-catch JSON.parse。→ [1.4](/ch1-llm-engineering/tool-use)
+
+---
+
+下一页：[常见坑与 FAQ](./pitfalls)

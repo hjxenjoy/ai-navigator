@@ -145,4 +145,4 @@ async function callAITracked(params, meta) {
 
 ---
 
-第 2 章完成。下一步：[第 3 章 · 理解引擎盖下面](/ch3-under-the-hood/)
+下一节：[2.7 AI 应用安全](./security)

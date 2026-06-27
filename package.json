@@ -4,13 +4,14 @@
   "description": "写给工程师的 AI 完全指南",
   "type": "module",
   "scripts": {
-    "dev": "vitepress dev docs",
+    "dev": "vitepress dev docs --port 5847",
     "build": "vitepress build docs",
-    "preview": "vitepress preview docs"
+    "preview": "vitepress preview docs --port 5847"
   },
   "license": "ISC",
   "packageManager": "pnpm@10.18.2",
   "devDependencies": {
+    "@vite-pwa/vitepress": "^1.1.0",
     "vitepress": "^1.6.4"
   }
 }

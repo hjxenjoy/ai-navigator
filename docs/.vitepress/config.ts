@@ -1,14 +1,44 @@
 import { defineConfig } from 'vitepress'
+import { withPwa } from '@vite-pwa/vitepress'
 
-export default defineConfig({
+export default withPwa(defineConfig({
   title: 'AI Navigator',
   description: '写给工程师的 AI 完全指南——从会用到真正掌控',
   lang: 'zh-CN',
+  cleanUrls: true,
+
+  // 离线阅读（PWA）：访问过的页面会被缓存，断网也能看
+  pwa: {
+    registerType: 'autoUpdate',
+    manifest: {
+      name: 'AI Navigator',
+      short_name: 'AI Navigator',
+      description: '写给工程师的 AI 完全指南',
+      lang: 'zh-CN',
+      theme_color: '#3c8772',
+      background_color: '#ffffff',
+      display: 'standalone',
+      icons: [
+        { src: '/logo.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any maskable' },
+      ],
+    },
+    workbox: {
+      globPatterns: ['**/*.{js,css,html,svg,woff2}'],
+      navigateFallback: undefined,
+    },
+  },
+
+  head: [
+    ['link', { rel: 'icon', href: '/logo.svg', type: 'image/svg+xml' }],
+    ['link', { rel: 'apple-touch-icon', href: '/logo.svg' }],
+    ['meta', { name: 'theme-color', content: '#3c8772' }],
+  ],
 
   themeConfig: {
     siteTitle: '🧭 AI Navigator',
     nav: [
       { text: '开始学习', link: '/ch0-mindset/' },
+      { text: '复习巩固', link: '/review/' },
       { text: '词汇速查', link: '/glossary/' },
       { text: '跟上前沿', link: '/keep-current/' },
     ],
@@ -19,6 +49,7 @@ export default defineConfig({
         items: [
           { text: '这份指南是什么', link: '/' },
           { text: '如何使用这份指南', link: '/how-to-use' },
+          { text: '部署与离线阅读', link: '/deploy' },
         ],
       },
       {
@@ -58,6 +89,9 @@ export default defineConfig({
           { text: '2.4 为什么 Agent 会失控', link: '/ch2-build-products/agent-failure' },
           { text: '2.5 AI 系统的评估方法', link: '/ch2-build-products/evaluation' },
           { text: '2.6 生产环境的坑', link: '/ch2-build-products/production' },
+          { text: '2.7 AI 应用安全', link: '/ch2-build-products/security' },
+          { text: '2.8 成本估算实操', link: '/ch2-build-products/cost-estimation' },
+          { text: '2.9 实战项目：知识库问答 Agent', link: '/ch2-build-products/capstone' },
         ],
       },
       {
@@ -81,6 +115,17 @@ export default defineConfig({
           { text: '4.4 Claude Code 深度使用', link: '/ch4-agent-mcp/claude-code' },
           { text: '4.5 Skill 与 Harness 机制', link: '/ch4-agent-mcp/skill-harness' },
           { text: '4.6 多 Agent 协作', link: '/ch4-agent-mcp/multi-agent' },
+          { text: '4.7 AI 编程实战工作流', link: '/ch4-agent-mcp/ai-coding-workflow' },
+        ],
+      },
+      {
+        text: '🎯 复习巩固',
+        collapsed: false,
+        items: [
+          { text: '速记卡', link: '/review/' },
+          { text: '自测题库', link: '/review/quiz' },
+          { text: '决策速查', link: '/review/decisions' },
+          { text: '常见坑与 FAQ', link: '/review/pitfalls' },
         ],
       },
       {
@@ -118,4 +163,4 @@ export default defineConfig({
   },
 
   lastUpdated: true,
-})
+}))

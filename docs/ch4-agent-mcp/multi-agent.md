@@ -106,4 +106,4 @@ Agent B 从 /tmp/task-output/schema.json 读取并继续工作
 
 ---
 
-第 4 章完成。下一步：[跟上 AI 前沿](/keep-current/)
+下一节：[4.7 AI 编程实战工作流](./ai-coding-workflow)
