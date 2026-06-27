@@ -175,6 +175,49 @@ console.log(result)
 
 ---
 
+---
+
+## 🛠️ 实战练习：给 Tool Use 示例增加新工具
+
+在上面的代码基础上，新增一个 `list_users` 工具，让 AI 能查询所有用户列表。
+
+**步骤：**
+
+1. 在 `tools` 数组里新增工具定义：
+```javascript
+{
+  name: "list_users",
+  description: "查询系统中所有用户的列表，返回 id 和 username",
+  input_schema: {
+    type: "object",
+    properties: {
+      limit: {
+        type: "number",
+        description: "最多返回多少个用户，默认 10"
+      }
+    }
+  }
+}
+```
+
+2. 在工具执行逻辑里加上处理：
+```javascript
+if (block.name === "list_users") {
+  const limit = block.input.limit || 10
+  result = [
+    { id: "user_001", username: "张三" },
+    { id: "user_002", username: "李四" },
+    { id: "user_003", username: "王五" },
+  ].slice(0, limit)
+}
+```
+
+3. 测试：`await chat("列出所有用户")`
+
+**进阶挑战**：让 AI 先查列表，再根据 username 查某个具体用户的详情。这会触发 AI 连续调用两个工具，观察消息历史是怎么增长的。
+
+---
+
 ## 📌 关键结论
 
 1. AI 不直接执行代码，而是发出"调用请求"，由你的代码真正执行

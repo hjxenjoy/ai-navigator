@@ -67,9 +67,9 @@ AI 回答：${aiAnswer}
 Benchmark 是一套标准化的测试集，用来对比不同模型或不同版本的能力。
 
 你经常会看到：
-- **MMLU**：测试模型的通用知识，几十个领域的题目
-- **HumanEval**：测试代码生成能力
-- **GSM8K**：测试数学推理能力
+- **MMLU**（Massive Multitask Language Understanding）：覆盖 57 个学科的多选题，测通用知识
+- **HumanEval**：OpenAI 出的代码生成测试，给函数签名和注释，让模型写出实现
+- **GSM8K**（Grade School Math 8K）：8000 道小学数学应用题，测多步骤推理
 
 这些是评估模型本身的基准。对你更有用的是**为你的具体场景建立自己的评估集**。
 
@@ -95,6 +95,21 @@ const testCases = [
 **第二步：自动化运行评估**
 
 ```javascript
+import Anthropic from "@anthropic-ai/sdk"
+
+const client = new Anthropic()
+
+// 封装 AI 调用
+async function askAI(question) {
+  const response = await client.messages.create({
+    model: "claude-haiku-4-5-20251001",
+    max_tokens: 512,
+    system: "你是一个客服助手，根据公司政策回答用户问题。退款政策：购买后7天内可申请，3-5个工作日退回。",
+    messages: [{ role: "user", content: question }]
+  })
+  return response.content[0].text
+}
+
 async function runEvaluation(testCases) {
   const results = []
   for (const tc of testCases) {
@@ -106,6 +121,10 @@ async function runEvaluation(testCases) {
   
   const passRate = results.filter(r => r.passed).length / results.length
   console.log(`通过率: ${(passRate * 100).toFixed(1)}%`)
+  results.filter(r => !r.passed).forEach(r => {
+    console.log(`\n❌ 失败: "${r.input}"`)
+    console.log(`   AI回答: ${r.response.slice(0, 100)}...`)
+  })
   return results
 }
 ```
@@ -132,6 +151,25 @@ Recall    = 2/5 = 40%（5个相关文档里，找到了2个）
 ```
 
 两者是有取舍的：提高精准率往往会降低召回率，反之亦然。
+
+---
+
+---
+
+## 🛠️ 实战练习：给你的 AI 功能建立第一个评估集
+
+**目标**：10 分钟内，给你现有的某个 AI 功能建立一个最小的评估体系。
+
+**第一步**：选一个你最常用的 AI 功能（比如客服问答、代码生成、文档总结）
+
+**第二步**：想出 5 个典型的测试问题，包括：
+- 2 个"正常问题"（正常情况下 AI 应该能答对的）
+- 2 个"边界问题"（AI 可能答错或答偏的）
+- 1 个"故意刁难"（用户可能提的奇怪问题）
+
+**第三步**：把上面的完整代码（含 `askAI` 函数）复制到本地，替换成你自己的 System Prompt 和测试案例，运行一次，看通过率是多少。
+
+**判断标准**：通过率 ≥ 80% 是可接受水平，< 60% 说明 Prompt 有明显问题需要优化。
 
 ---
 

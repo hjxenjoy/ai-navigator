@@ -65,7 +65,9 @@
 
 这些来自 SFT 阶段的训练数据风格，以及 RLHF 阶段标注者的偏好。
 
-Anthropic 的 Constitutional AI（用规则代替纯人工标注）让 Claude 有了相对一致的"价值观"：诚实、有帮助、无害。
+Anthropic 用了一种叫 **Constitutional AI（宪法式 AI）** 的方法来训练 Claude——顾名思义，就像给 AI 制定一部"宪法"：先写下一系列原则（诚实、有帮助、无害等），再用这些原则让 AI 自己评判自己的回答好不好，而不完全依赖人工标注。
+
+这就是为什么 Claude 和 GPT 感觉"性格不一样"：两者的 RLHF 数据和价值取向不同，GPT 更倾向于取悦用户，Claude 更倾向于诚实和直接。
 
 ---
 

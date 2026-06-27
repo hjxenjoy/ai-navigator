@@ -45,7 +45,7 @@ Temperature = 2：放大随机性 → 输出更"创意"，但也更容易出错
 Top-K = 3 时：只从"猫/狗/鸟"里选，砍掉了"鱼"和"树"
 ```
 
-**Top-P（也叫 Nucleus Sampling）**：从概率累计到 P% 为止的候选词里选。
+**Top-P**：从概率累计到 P% 为止的候选词里选（英文叫 Nucleus Sampling，这个名字来自数学概念，你不需要管它为什么叫这个名字）。
 
 ```
 Top-P = 0.9 时：从概率加起来到 90% 的词里选
@@ -104,6 +104,43 @@ stopSequences: ["###"]
 - 用户体验好，不用盯着空白等
 - 对于长回复，减少"首字等待时间"（Time to First Token）
 - 出错了可以提前看到，不用等到最后
+
+---
+
+---
+
+## 🛠️ 实战练习：Temperature 对比实验
+
+用同一个 Prompt，分别用不同 Temperature 调用 API，观察输出差异：
+
+```javascript
+import Anthropic from "@anthropic-ai/sdk"
+const client = new Anthropic()
+
+const prompt = "给我写一个函数名，这个函数的作用是：把用户列表按注册时间排序"
+
+async function testTemperature(temp) {
+  const response = await client.messages.create({
+    model: "claude-haiku-4-5-20251001",
+    max_tokens: 50,
+    temperature: temp,
+    messages: [{ role: "user", content: prompt }]
+  })
+  console.log(`Temperature ${temp}: ${response.content[0].text.trim()}`)
+}
+
+// 跑5次，每次用不同的 temperature
+for (const temp of [0, 0.3, 0.7, 1.0, 1.5]) {
+  await testTemperature(temp)
+}
+```
+
+**运行之前准备**：确保设置了环境变量 `ANTHROPIC_API_KEY`。
+
+**观察要点**：
+- Temperature = 0 时，多次运行是否总是同一个答案？
+- Temperature = 1.5 时，答案是否有时候显得"奇怪"？
+- 哪个 Temperature 的结果最符合你的期望？
 
 ---
 
