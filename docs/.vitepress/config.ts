@@ -166,6 +166,7 @@ export default withPwa(defineConfig({
           { text: '自测题库', link: '/review/quiz' },
           { text: '决策速查', link: '/review/decisions' },
           { text: '常见坑与 FAQ', link: '/review/pitfalls' },
+          { text: '提示词模板速查', link: '/review/prompt-templates' },
         ],
       },
       {

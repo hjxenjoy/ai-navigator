@@ -22,6 +22,10 @@
 | 想动手做 RAG | [2.1 RAG 完整 Pipeline](/ch2-build-products/) |
 | 想搞懂 MCP | [第 4 章](/ch4-agent-mcp/) |
 | Fine-tuning 是什么 | [3.4 Fine-tuning vs RAG](/ch3-under-the-hood/finetuning-vs-rag) |
+| 想把提示词写好 | [第 6 章 · 提示词工程精通](/ch6-prompt-mastery/) |
+| 想深入 RAG/MCP/Skill/微调 的落地 | [第 5 章 · 深入与落地](/ch5-deep-dives/) |
+| 想直接抄提示词模板 | [提示词模板速查](/review/prompt-templates) |
+| 想碎片时间复习 | [🎯 复习巩固](/review/) |
 
 ## 阅读约定
 
