@@ -96,6 +96,7 @@ export default withPwa(withMermaid(defineConfig({
           { text: '1.10 在本地跑模型（Ollama）', link: '/ch1-llm-engineering/local-models' },
           { text: '1.11 图像与视频生成', link: '/ch1-llm-engineering/image-video-gen' },
           { text: '1.12 语音与实时（ASR/TTS）', link: '/ch1-llm-engineering/voice-realtime' },
+          { text: '1.13 自托管推理部署', link: '/ch1-llm-engineering/self-hosting' },
         ],
       },
       {

@@ -46,6 +46,8 @@ Prompt Engineering 能解决吗？
 | 最强能力 / 高并发 / 省心稳定 | 云端 |
 
 > 常见组合：开发调试用本地，生产上线用云端（靠 OpenAI 兼容协议无缝切换）。→ [1.10](/ch1-llm-engineering/local-models)
+>
+> **要把开源模型自己跑上生产**（数据合规/规模反转成本/跑自微调模型）：别用 Ollama 硬扛并发，换 vLLM 这类推理引擎，并把运维成本算进总账。→ [1.13](/ch1-llm-engineering/self-hosting)
 
 ---
 
