@@ -121,6 +121,17 @@ export default withPwa(defineConfig({
         ],
       },
       {
+        text: '第 5 章 · 深入与落地',
+        collapsed: true,
+        items: [
+          { text: '5.1 RAG·进阶检索', link: '/ch5-deep-dives/' },
+          { text: '5.2 RAG·接入真实向量库', link: '/ch5-deep-dives/vector-db' },
+          { text: '5.3 RAG·评估与防幻觉', link: '/ch5-deep-dives/rag-eval' },
+          { text: '5.4 RAG·真实文档处理', link: '/ch5-deep-dives/document-processing' },
+          { text: '5.5 RAG·实战案例集', link: '/ch5-deep-dives/rag-cases' },
+        ],
+      },
+      {
         text: '🎯 复习巩固',
         collapsed: false,
         items: [
