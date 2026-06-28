@@ -151,9 +151,9 @@ async function search(query, { category, topK = 3 } = {}) {
 
 ---
 
-## 🛠️ 实战练习：把 2.9 的 Capstone 换成真向量库
+## 🛠️ 实战练习：把 2.11 的 Capstone 换成真向量库
 
-把 [2.9 知识库 Agent](/ch2-build-products/capstone) 里的内存数组检索，换成上面任一方案：
+把 [2.11 知识库 Agent](/ch2-build-products/capstone) 里的内存数组检索，换成上面任一方案：
 
 1. 选 pgvector（有 PG 就用）或 Qdrant（Docker 起一个）
 2. 把那 4 条 `documents` 写进向量库（带上 `category` 元数据）

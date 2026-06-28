@@ -108,4 +108,4 @@
 
 ---
 
-RAG 深入系列完成 🎉 下一节进入 MCP 深入：[5.6 MCP·三种能力深入与高层 SDK](./mcp-capabilities)
+下一节：[5.17 RAG·GraphRAG 与 Agentic RAG](./rag-advanced)

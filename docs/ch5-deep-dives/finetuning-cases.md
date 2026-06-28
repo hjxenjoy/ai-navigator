@@ -90,4 +90,4 @@
 
 ---
 
-🎉 **第 5 章完成**，四大主题（RAG / MCP / Skill / 微调）全部深入收尾。下一步：[第 6 章 · 提示词工程精通](/ch6-prompt-mastery/)，或去 [🎯 复习巩固](/review/) · [词汇速查](/glossary/) · [跟上 AI 前沿](/keep-current/)
+下一节：[5.18 微调·Embedding 与 Reranker](./finetuning-retrieval)

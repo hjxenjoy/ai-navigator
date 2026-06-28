@@ -110,7 +110,9 @@ export default withPwa(withMermaid(defineConfig({
           { text: '2.6 生产环境的坑', link: '/ch2-build-products/production' },
           { text: '2.7 AI 应用安全', link: '/ch2-build-products/security' },
           { text: '2.8 成本估算实操', link: '/ch2-build-products/cost-estimation' },
-          { text: '2.9 实战项目：知识库问答 Agent', link: '/ch2-build-products/capstone' },
+          { text: '2.9 可观测性与线上监控', link: '/ch2-build-products/observability' },
+          { text: '2.10 AI 功能安全上线', link: '/ch2-build-products/safe-launch' },
+          { text: '2.11 实战项目：知识库问答 Agent', link: '/ch2-build-products/capstone' },
         ],
       },
       {
@@ -137,6 +139,8 @@ export default withPwa(withMermaid(defineConfig({
           { text: '4.7 AI 编程实战工作流', link: '/ch4-agent-mcp/ai-coding-workflow' },
           { text: '4.8 Agent = Model + Harness', link: '/ch4-agent-mcp/harness-engineering' },
           { text: '4.9 上下文工程', link: '/ch4-agent-mcp/context-engineering' },
+          { text: '4.10 Agent 长期记忆系统', link: '/ch4-agent-mcp/long-term-memory' },
+          { text: '4.11 Computer Use 与浏览器 Agent', link: '/ch4-agent-mcp/computer-use' },
         ],
       },
       {
@@ -144,7 +148,7 @@ export default withPwa(withMermaid(defineConfig({
         collapsed: true,
         items: [
           {
-            text: 'RAG 进阶（5.1–5.5）',
+            text: 'RAG 进阶（5.1–5.5、5.17）',
             collapsed: true,
             items: [
               { text: '5.1 RAG·进阶检索', link: '/ch5-deep-dives/' },
@@ -152,6 +156,7 @@ export default withPwa(withMermaid(defineConfig({
               { text: '5.3 RAG·评估与防幻觉', link: '/ch5-deep-dives/rag-eval' },
               { text: '5.4 RAG·真实文档处理', link: '/ch5-deep-dives/document-processing' },
               { text: '5.5 RAG·实战案例集', link: '/ch5-deep-dives/rag-cases' },
+              { text: '5.17 RAG·GraphRAG 与 Agentic RAG', link: '/ch5-deep-dives/rag-advanced' },
             ],
           },
           {
@@ -174,13 +179,14 @@ export default withPwa(withMermaid(defineConfig({
             ],
           },
           {
-            text: '模型微调（5.13–5.16）',
+            text: '模型微调（5.13–5.16、5.18）',
             collapsed: true,
             items: [
               { text: '5.13 微调·全流程与数据准备', link: '/ch5-deep-dives/finetuning-workflow' },
               { text: '5.14 微调·国产平台云端微调', link: '/ch5-deep-dives/finetuning-cloud' },
               { text: '5.15 微调·本地 LoRA 与 Ollama', link: '/ch5-deep-dives/finetuning-local' },
               { text: '5.16 微调·案例集与决策', link: '/ch5-deep-dives/finetuning-cases' },
+              { text: '5.18 微调·Embedding 与 Reranker', link: '/ch5-deep-dives/finetuning-retrieval' },
             ],
           },
         ],

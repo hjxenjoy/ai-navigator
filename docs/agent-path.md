@@ -45,7 +45,7 @@ Agent = 会自己调工具、能记住上下文的 LLM。先把这两块底座�
 
 把前面的东西拼成一个真能用的东西——这是整条路的落地里程碑。
 
-- [2.9 实战项目：知识库问答 Agent](/ch2-build-products/capstone) — 检索作为工具 + Agent 循环 + 评估 + 上线三关，端到端走一遍
+- [2.11 实战项目：知识库问答 Agent](/ch2-build-products/capstone) — 检索作为工具 + Agent 循环 + 评估 + 上线三关，端到端走一遍
 
 ## ⑤ 进阶：决定 Agent 上限的工程功夫
 
@@ -68,7 +68,7 @@ Agent = 会自己调工具、能记住上下文的 LLM。先把这两块底座�
 ## 📌 关键结论
 
 1. Agent 内容分布在第 1/2/4 章，主线顺序：**工具/记忆基础 → 循环与模式 → 可靠性 → 端到端实战 → Harness/上下文/多 Agent → MCP/Skill 生态**
-2. 最小闭环只需 ①②④：搞懂 Tool Use + Agent 循环，就能跑通 [2.9 实战项目](/ch2-build-products/capstone)
+2. 最小闭环只需 ①②④：搞懂 Tool Use + Agent 循环，就能跑通 [2.11 实战项目](/ch2-build-products/capstone)
 3. 想做"能扛长任务、不跑偏"的 Agent，真正的功夫在第 ⑤ 步的 [Harness](/ch4-agent-mcp/harness-engineering) 和 [上下文工程](/ch4-agent-mcp/context-engineering)
 4. 要给 Agent 扩外部能力，走 MCP/Skill 生态（第 ⑥ 步）
 

@@ -121,7 +121,7 @@ ollama run my-qwen "把这条反馈分类：登录页打不开"
 
 **期望结果**：你完整体验一遍"数据→LoRA→GGUF→Ollama"，并亲历"模板必须一致"这个坑。
 
-**进阶挑战**：把这个本地微调模型接进 [2.9 的 Capstone](/ch2-build-products/capstone) 或 [5.5 案例](./rag-cases)，做一个完全离线、且在你专项任务上更准的版本。
+**进阶挑战**：把这个本地微调模型接进 [2.11 的 Capstone](/ch2-build-products/capstone) 或 [5.5 案例](./rag-cases)，做一个完全离线、且在你专项任务上更准的版本。
 
 ---
 
