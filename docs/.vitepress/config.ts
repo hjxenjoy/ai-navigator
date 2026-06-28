@@ -1,7 +1,8 @@
 import { defineConfig } from 'vitepress'
 import { withPwa } from '@vite-pwa/vitepress'
+import { withMermaid } from 'vitepress-plugin-mermaid'
 
-export default withPwa(defineConfig({
+export default withPwa(withMermaid(defineConfig({
   title: 'AI Navigator',
   description: '写给工程师的 AI 完全指南——从会用到真正掌控',
   lang: 'zh-CN',
@@ -228,4 +229,15 @@ export default withPwa(defineConfig({
   },
 
   lastUpdated: true,
-}))
+
+  // Mermaid 图表配置（深色模式自动切换主题）
+  mermaid: {
+    // 中文 + 多行标签时，默认节点高度偏紧会裁掉底部，加大内边距留白
+    flowchart: {
+      padding: 16,
+      nodeSpacing: 50,
+      rankSpacing: 50,
+      useMaxWidth: true,
+    },
+  },
+})))

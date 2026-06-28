@@ -94,18 +94,14 @@ Fine-tuning 需要足够的高质量训练数据，通常几百到几千个样�
 
 ## 实际决策流程
 
-```
-任务是否需要实时/动态知识？
-  ├── 是 → RAG
-  └── 否 → 继续判断
-
-任务是否是固定格式/风格的输出？
-  ├── 是 → Fine-tuning 可能有用
-  └── 否 → 先试 RAG + Prompt Engineering
-
-Prompt Engineering 能解决问题吗？
-  ├── 能 → 用 Prompt，不用 Fine-tuning
-  └── 不能，且有足够数据 → Fine-tuning
+```mermaid
+flowchart TD
+    Q1{"需要实时/动态知识？"} -- 是 --> RAG["用 RAG"]
+    Q1 -- 否 --> Q2{"要固定格式/风格的输出？"}
+    Q2 -- 否 --> P1["先试 RAG + Prompt"]
+    Q2 -- 是 --> Q3{"Prompt 能搞定吗？"}
+    Q3 -- 能 --> P2["用 Prompt，不用微调"]
+    Q3 -- 不能，且数据足够 --> FT["Fine-tuning"]
 ```
 
 ---
