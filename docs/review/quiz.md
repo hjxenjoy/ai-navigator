@@ -192,4 +192,93 @@ Agent 不只是模型，而是"模型 + 外面那层脚手架"，表现一大半
 
 ---
 
+## 第 5 章 · 深入与落地
+
+### RAG 深入
+
+**Q25. 基础 RAG 检索为什么常"找不准"？举一个改进手法。**
+
+<details><summary>看答案</summary>
+
+根因：问题的形态 ≠ 答案的形态（口语 vs 正式措辞）。手法：查询改写、HyDE（先编个假答案去检索）、多路召回、父文档检索。→ [5.1](/ch5-deep-dives/)
+</details>
+
+**Q26. "上下文检索（Contextual Retrieval）"是怎么提升召回的？**
+
+<details><summary>看答案</summary>
+
+嵌入每个块之前，先让 LLM 生成一小段背景说明拼在块前面再 embedding，解决"块太碎、缺主体/时间"的问题。Anthropic 实测大幅降低检索失败率。→ [5.4](/ch5-deep-dives/document-processing)
+</details>
+
+**Q27. RAG 分哪两层评估？生成层最重要的指标是什么？**
+
+<details><summary>看答案</summary>
+
+检索层（相关文档召回没有，看 Recall@k）和生成层（答得忠不忠实）。生成层最重要是**忠实度**：回答每句是否都有检索依据，用 LLM-as-Judge 判。→ [5.3](/ch5-deep-dives/rag-eval)
+</details>
+
+### MCP 深入
+
+**Q28. MCP 的 Tool 和 Resource 有什么区别？**
+
+<details><summary>看答案</summary>
+
+Tool = 让 AI"做动作"（查库、下单，AI 决定何时调）；Resource = 只读"数据源"（挂文档/配置给 AI 读）。→ [5.6](/ch5-deep-dives/mcp-capabilities)
+</details>
+
+**Q29. 做远程 MCP 服务用什么传输？鉴权要注意什么？**
+
+<details><summary>看答案</summary>
+
+用 Streamable HTTP（SSE 已淘汰），无状态模式最易部署。鉴权用 OAuth，但**别自己手搓**，委托给成熟方案；用 MCP Inspector 调试。→ [5.7](/ch5-deep-dives/mcp-production)
+</details>
+
+**Q30. "让 Claude Code 查公司数据库"用 MCP 还是应用内 Tool？为什么？**
+
+<details><summary>看答案</summary>
+
+MCP。因为客户端是 Claude Code（不是你自己的 App），要跨客户端复用"查库"这个外部能力。自己 App 内用 AI 才用 Function Calling。→ [5.8](/ch5-deep-dives/mcp-decision)
+</details>
+
+### Skill 开发
+
+**Q31. Skill 的"渐进式披露"三层是什么？解决什么问题？**
+
+<details><summary>看答案</summary>
+
+①平时只加载 name+description（~100token）②激活才读完整 SKILL.md ③按需才读 reference/跑脚本。解决"装很多 Skill 又不占爆上下文"。→ [5.10](/ch5-deep-dives/skills-intro)
+</details>
+
+**Q32. Skill 的 `description` 为什么极其重要？**
+
+<details><summary>看答案</summary>
+
+AI 靠它判断"何时自动触发"这个 Skill。要写清"做什么+什么时候用"并含用户真实说法；写砸了装了也不触发。→ [5.10](/ch5-deep-dives/skills-intro)
+</details>
+
+### 模型微调
+
+**Q33. 微调 80% 的功夫在哪？数据是什么格式？**
+
+<details><summary>看答案</summary>
+
+在数据准备（质量>数量、一致性、覆盖分布、划验证集）。格式是 ChatML 的 JSONL，`assistant` 内容就是你要模型学会的标准输出。→ [5.13](/ch5-deep-dives/finetuning-workflow)
+</details>
+
+**Q34. 本地微调（LoRA→GGUF→Ollama）最常见的翻车点是什么？**
+
+<details><summary>看答案</summary>
+
+训练时用的 chat template 和 Ollama Modelfile 里的 TEMPLATE 不一致 → 输出乱码/答非所问。两边必须用同一套模板。→ [5.15](/ch5-deep-dives/finetuning-local)
+</details>
+
+**Q35. 一个任务该不该微调，决策顺序是怎样的？**
+
+<details><summary>看答案</summary>
+
+先穷尽 Prompt+Few-shot；缺知识/要实时用 RAG；只有"要稳定的格式/风格/专项准确率、Prompt 搞不定、且有几百+条数据"才微调（敏感数据本地、图省事云端）。→ [5.16](/ch5-deep-dives/finetuning-cases)
+</details>
+
+---
+
 下一页：[决策速查](./decisions)
