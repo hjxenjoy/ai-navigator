@@ -67,6 +67,8 @@ AI 按照 Skill 的指引执行任务
 
 ## Harness 是什么
 
+> 📖 本节是 Harness 的**快速认知**。它为什么决定 Agent 一大半表现、由哪些零件构成、怎么自己设计——见 [4.8 Agent = Model + Harness](./harness-engineering) 和 [4.9 上下文工程](./context-engineering) 的深入讲解。
+
 Harness 是运行 Claude Code Agent 的底层框架。你不直接和 Harness 交互，但理解它能帮你理解 Claude Code 的行为。
 
 **Harness 负责：**
