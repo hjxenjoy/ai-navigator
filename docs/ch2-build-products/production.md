@@ -141,7 +141,7 @@ async function callAITracked(params, meta) {
 2. AI 延迟和普通 API 不同，超时设置要调整
 3. 明确固定模型版本，模型升级要主动测试
 4. 日志是出问题时唯一的线索，从第一天就要记
-5. 上量后要有可观测性：结构化记录每次调用，带业务维度，多步 Agent 用 Trace 串起来
+5. 上量后要有可观测性：结构化记录每次调用，带业务维度，多步 Agent 用 Trace 串起来（深入见 [2.9 可观测性与线上监控](./observability)，安全发布见 [2.10](./safe-launch)）
 
 ---
 
