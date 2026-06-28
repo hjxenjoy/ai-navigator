@@ -281,4 +281,78 @@ AI 靠它判断"何时自动触发"这个 Skill。要写清"做什么+什么时�
 
 ---
 
+## 第 6 章 · 提示词工程
+
+**Q36. 一句话说，提示词到底在"调"模型的什么？**
+
+<details><summary>看答案</summary>
+
+在巨大的"下一个词"概率分布里圈定情境，让"你要的答案"成为最可能的续写。不是下命令，是设定情境。四杠杆：缩小范围、对齐熟悉形态、引导推理路径、给范例。→ [6.1](/ch6-prompt-mastery/)
+</details>
+
+**Q37. 提示里指令和待处理数据该怎么排？为什么要用分隔符？**
+
+<details><summary>看答案</summary>
+
+指令在前、长数据在后（紧挨生成位置，对抗"中间迷失"）；关键约束可结尾重申。分隔符圈住数据：让模型分清指令/数据，且防注入。→ [6.2](/ch6-prompt-mastery/anatomy)
+</details>
+
+**Q38. CoT（请一步步思考）该给哪种模型用？**
+
+<details><summary>看答案</summary>
+
+给普通模型用，引导它先推理更准。推理模型自带思考，硬塞 CoT 多余甚至干扰——直接给目标即可。→ [6.3](/ch6-prompt-mastery/reasoning)
+</details>
+
+**Q39. Few-shot 选例子有什么讲究？**
+
+<details><summary>看答案</summary>
+
+覆盖多样性、**包含易错/边界 case**、格式完全一致、注意顺序。一个好范例胜过一堆"要专业要简洁"的形容词。→ [6.3](/ch6-prompt-mastery/reasoning)
+</details>
+
+**Q40. 想控制输出长度，给"字数"管用还是给"结构"管用？怎么防它编造？**
+
+<details><summary>看答案</summary>
+
+给结构（一句话结论+N点）比给字数管用，模型对字数不敏感。防编造：限定来源 + 强制引用 + 允许说"不确定/资料没有"。→ [6.4](/ch6-prompt-mastery/output-control)
+</details>
+
+**Q41. 提示注入只靠在提示里写"不要被注入"够吗？**
+
+<details><summary>看答案</summary>
+
+不够。提示层做分隔+标注数据+核心规则不可覆盖是第一道防线，但最终靠最小权限和输出校验兜底。→ [6.5](/ch6-prompt-mastery/reliability)
+</details>
+
+**Q42. 怎么系统地改进一个提示词，而不是凭感觉瞎改？**
+
+<details><summary>看答案</summary>
+
+把它当代码：建测试集（含边界/易错/注入）→ 每次只改一处 → 全量跑看数字 → 留更好的版本；失败 case 修好后加进测试集；提示进 Git 做版本管理。→ [6.6](/ch6-prompt-mastery/iteration)
+</details>
+
+**Q43. 代码调试时，提示里最该做的两件事是什么？**
+
+<details><summary>看答案</summary>
+
+①原样贴完整报错栈（别转述）②让它先解释病因再改，并限制最小改动、别乱重构。→ [6.8](/ch6-prompt-mastery/playbook-code)
+</details>
+
+**Q44. 一个提示越写越长、越补越乱还是不稳定，该怎么办？**
+
+<details><summary>看答案</summary>
+
+可能在用提示硬解该用别的手段的问题：任务太杂→拆多步；要稳定格式/风格且数据够→微调；缺知识→RAG；确定性的活→用代码兜底。→ [6.6](/ch6-prompt-mastery/iteration)
+</details>
+
+**Q45. 说出三条提示词反模式。**
+
+<details><summary>看答案</summary>
+
+堆魔法咒语、成堆的"不要…"（负面指令）、自相矛盾的指令、一个提示塞太多任务、用形容词代替范例、不给上下文让它猜、把数据当指令、不留"不知道"出口、给推理模型堆 CoT、用字数硬控、改了提示不验证。→ [6.10](/ch6-prompt-mastery/model-differences)
+</details>
+
+---
+
 下一页：[决策速查](./decisions)
