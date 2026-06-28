@@ -152,6 +152,10 @@ export default withPwa(defineConfig({
           { text: '6.4 控制输出', link: '/ch6-prompt-mastery/output-control' },
           { text: '6.5 让提示词稳定可靠', link: '/ch6-prompt-mastery/reliability' },
           { text: '6.6 迭代与评估方法论', link: '/ch6-prompt-mastery/iteration' },
+          { text: '6.7 场景·信息处理', link: '/ch6-prompt-mastery/playbook-info' },
+          { text: '6.8 场景·代码与技术', link: '/ch6-prompt-mastery/playbook-code' },
+          { text: '6.9 场景·对话客服与 RAG/Agent', link: '/ch6-prompt-mastery/playbook-chat-rag' },
+          { text: '6.10 模型差异与反模式清单', link: '/ch6-prompt-mastery/model-differences' },
         ],
       },
       {

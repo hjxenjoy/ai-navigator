@@ -120,4 +120,4 @@ console.log(`通过率 ${(pass/testCases.length*100).toFixed(0)}%`)
 
 ---
 
-🎉 第 6 章基础部分（6.1–6.6）完成。下一批进入**分场景实战 Playbook**（信息处理 / 代码 / 客服对话 / RAG·Agent，即将推出）。回顾：[6.1 心法](./) · [6.2 解剖](./anatomy) · [6.3 推理与示例](./reasoning) · [6.4 输出控制](./output-control) · [6.5 稳定可靠](./reliability)
+第 6 章基础部分（6.1–6.6）完成。下一节进入分场景实战 Playbook：[6.7 场景 Playbook·信息处理](./playbook-info)
