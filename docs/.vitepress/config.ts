@@ -143,6 +143,18 @@ export default withPwa(defineConfig({
         ],
       },
       {
+        text: '第 6 章 · 提示词工程精通',
+        collapsed: true,
+        items: [
+          { text: '6.1 提示词到底在调什么', link: '/ch6-prompt-mastery/' },
+          { text: '6.2 提示词的解剖', link: '/ch6-prompt-mastery/anatomy' },
+          { text: '6.3 推理与示例技巧深入', link: '/ch6-prompt-mastery/reasoning' },
+          { text: '6.4 控制输出', link: '/ch6-prompt-mastery/output-control' },
+          { text: '6.5 让提示词稳定可靠', link: '/ch6-prompt-mastery/reliability' },
+          { text: '6.6 迭代与评估方法论', link: '/ch6-prompt-mastery/iteration' },
+        ],
+      },
+      {
         text: '🎯 复习巩固',
         collapsed: false,
         items: [
