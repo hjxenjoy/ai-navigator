@@ -129,6 +129,10 @@ export default withPwa(defineConfig({
           { text: '5.3 RAG·评估与防幻觉', link: '/ch5-deep-dives/rag-eval' },
           { text: '5.4 RAG·真实文档处理', link: '/ch5-deep-dives/document-processing' },
           { text: '5.5 RAG·实战案例集', link: '/ch5-deep-dives/rag-cases' },
+          { text: '5.6 MCP·三种能力与高层 SDK', link: '/ch5-deep-dives/mcp-capabilities' },
+          { text: '5.7 MCP·生产级远程服务', link: '/ch5-deep-dives/mcp-production' },
+          { text: '5.8 MCP·选型决策', link: '/ch5-deep-dives/mcp-decision' },
+          { text: '5.9 MCP·案例集', link: '/ch5-deep-dives/mcp-cases' },
         ],
       },
       {

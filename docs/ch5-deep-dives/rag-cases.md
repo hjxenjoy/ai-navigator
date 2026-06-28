@@ -108,4 +108,4 @@
 
 ---
 
-RAG 深入系列完成 🎉 接下来是 **MCP 深入**（即将推出）。回顾：[5.1 进阶检索](./) · [5.2 向量库](./vector-db) · [5.3 评估防幻觉](./rag-eval) · [5.4 文档处理](./document-processing)
+RAG 深入系列完成 🎉 下一节进入 MCP 深入：[5.6 MCP·三种能力深入与高层 SDK](./mcp-capabilities)
