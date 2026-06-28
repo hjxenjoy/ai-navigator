@@ -65,6 +65,7 @@ export default withPwa(withMermaid(defineConfig({
         items: [
           { text: '这份指南是什么', link: '/' },
           { text: '如何使用这份指南', link: '/how-to-use' },
+          { text: 'Agent 学习路径', link: '/agent-path' },
           { text: '部署与离线阅读', link: '/deploy' },
         ],
       },
@@ -93,6 +94,8 @@ export default withPwa(withMermaid(defineConfig({
           { text: '1.8 多模态：图像与文档输入', link: '/ch1-llm-engineering/multimodal' },
           { text: '1.9 OpenAI 兼容协议与多模型切换', link: '/ch1-llm-engineering/openai-compatible' },
           { text: '1.10 在本地跑模型（Ollama）', link: '/ch1-llm-engineering/local-models' },
+          { text: '1.11 图像与视频生成', link: '/ch1-llm-engineering/image-video-gen' },
+          { text: '1.12 语音与实时（ASR/TTS）', link: '/ch1-llm-engineering/voice-realtime' },
         ],
       },
       {

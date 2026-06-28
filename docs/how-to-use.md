@@ -18,6 +18,7 @@
 |---------|---------|
 | AI 词汇看不懂 | [词汇速查手册](/glossary/) |
 | 想知道 AI 到底是什么 | [第 0 章](/ch0-mindset/) |
+| 专门想系统学 AI Agent | [Agent 学习路径](/agent-path) |
 | Agent 经常失控，想搞清楚为什么 | [2.4 为什么 Agent 会失控](/ch2-build-products/agent-failure) |
 | 想动手做 RAG | [2.1 RAG 完整 Pipeline](/ch2-build-products/) |
 | 想搞懂 MCP | [第 4 章](/ch4-agent-mcp/) |

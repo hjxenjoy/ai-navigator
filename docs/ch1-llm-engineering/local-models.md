@@ -123,4 +123,4 @@ const question = "写一个 JS 函数，判断一个字符串是不是合法的 
 
 ---
 
-第 1 章完成。下一步：[第 2 章 · 构建 AI 产品](/ch2-build-products/)
+下一节：[1.11 图像与视频生成](./image-video-gen)
