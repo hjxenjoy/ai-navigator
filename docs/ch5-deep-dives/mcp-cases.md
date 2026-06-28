@@ -109,4 +109,4 @@ Tool: restart_service(service)           —— ⚠️ 危险操作，需确认
 
 ---
 
-MCP 深入系列完成 🎉 接下来是 **Skill 开发**（即将推出）。回顾：[5.6 能力与SDK](./mcp-capabilities) · [5.7 生产级远程](./mcp-production) · [5.8 选型决策](./mcp-decision)
+MCP 深入系列完成 🎉 下一节进入 Skill 开发：[5.10 Skill·究竟是什么](./skills-intro)

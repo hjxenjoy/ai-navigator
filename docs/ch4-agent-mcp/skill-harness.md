@@ -6,6 +6,8 @@ Skill（技能）是 Claude Code 的可插拔能力扩展。你输入 `/frontend
 
 **Skill 的本质**：一段 Markdown 文件，包含了触发条件、执行指令和上下文信息，当你调用斜杠命令时，这段内容被注入到 AI 的上下文里，指导它以特定方式处理任务。
 
+> 📖 本节是 Skill 的快速认知。Anthropic 后来把 **Agent Skills** 做成了开放标准（文件夹 + `SKILL.md` + 可捆绑脚本 + 渐进式披露），比"斜杠命令"强大得多。完整、最新的讲解和手把手开发，见 [5.10–5.12 Skill 深入](/ch5-deep-dives/skills-intro)。
+
 ---
 
 ## Skill 的工作原理

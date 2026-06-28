@@ -133,6 +133,9 @@ export default withPwa(defineConfig({
           { text: '5.7 MCP·生产级远程服务', link: '/ch5-deep-dives/mcp-production' },
           { text: '5.8 MCP·选型决策', link: '/ch5-deep-dives/mcp-decision' },
           { text: '5.9 MCP·案例集', link: '/ch5-deep-dives/mcp-cases' },
+          { text: '5.10 Skill·究竟是什么', link: '/ch5-deep-dives/skills-intro' },
+          { text: '5.11 Skill·手把手开发与打包', link: '/ch5-deep-dives/skills-build' },
+          { text: '5.12 Skill·案例集', link: '/ch5-deep-dives/skills-cases' },
         ],
       },
       {
