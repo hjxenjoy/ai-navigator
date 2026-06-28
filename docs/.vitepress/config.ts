@@ -24,8 +24,23 @@ export default withPwa(withMermaid(defineConfig({
       ],
     },
     workbox: {
-      globPatterns: ['**/*.{js,css,html,svg,woff2}'],
+      // 静态资源带哈希指纹，预缓存供离线使用（新部署 = 新文件名，天然不冲突）
+      globPatterns: ['**/*.{js,css,woff2,svg}'],
       navigateFallback: undefined,
+      cleanupOutdatedCaches: true,
+      // 页面（HTML/导航请求）网络优先：在线永远最新，断网回退到访问过的缓存
+      runtimeCaching: [
+        {
+          urlPattern: ({ request }) => request.mode === 'navigate',
+          handler: 'NetworkFirst',
+          options: {
+            cacheName: 'pages-network-first',
+            networkTimeoutSeconds: 3,
+            expiration: { maxEntries: 200, maxAgeSeconds: 60 * 60 * 24 * 30 },
+            cacheableResponse: { statuses: [0, 200] },
+          },
+        },
+      ],
     },
   },
 
