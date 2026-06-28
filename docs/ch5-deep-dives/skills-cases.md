@@ -150,4 +150,4 @@ allowed-tools: Bash, Read, Write
 
 ---
 
-Skill 开发系列完成 🎉 接下来是本章最后一块 **模型微调实战**（即将推出）。回顾：[5.10 Skill 是什么](./skills-intro) · [5.11 手把手开发](./skills-build)
+Skill 开发系列完成 🎉 下一节进入本章最后一块——模型微调实战：[5.13 微调·全流程与数据准备](./finetuning-workflow)

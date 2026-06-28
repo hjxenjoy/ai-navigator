@@ -136,6 +136,10 @@ export default withPwa(defineConfig({
           { text: '5.10 Skill·究竟是什么', link: '/ch5-deep-dives/skills-intro' },
           { text: '5.11 Skill·手把手开发与打包', link: '/ch5-deep-dives/skills-build' },
           { text: '5.12 Skill·案例集', link: '/ch5-deep-dives/skills-cases' },
+          { text: '5.13 微调·全流程与数据准备', link: '/ch5-deep-dives/finetuning-workflow' },
+          { text: '5.14 微调·国产平台云端微调', link: '/ch5-deep-dives/finetuning-cloud' },
+          { text: '5.15 微调·本地 LoRA 与 Ollama', link: '/ch5-deep-dives/finetuning-local' },
+          { text: '5.16 微调·案例集与决策', link: '/ch5-deep-dives/finetuning-cases' },
         ],
       },
       {
