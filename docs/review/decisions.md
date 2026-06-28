@@ -136,8 +136,13 @@ Prompt Engineering 能解决吗？
 | 相关文档进了候选池但排名靠后 | Reranking 重排序 |
 | 要精确匹配数字/编号 | Hybrid（语义 + 关键词 BM25） |
 | 检索质量整体差 | 先查**分块**（5.4），别急着换模型 |
+| 全局/关系型问题（"整体趋势""谁和谁什么关系"） | GraphRAG（建知识图谱 + 社区摘要，5.17） |
+| 含糊/多步/多跳查询 | Agentic RAG（检索做成工具，自主改写+多轮，5.17） |
+| 领域术语特殊、召回老差 | 先加通用 Reranker；确实不行才微调 Embedding（5.18） |
 
-→ [5.1](/ch5-deep-dives/) · [5.4](/ch5-deep-dives/document-processing)
+> 进阶范式（GraphRAG / Agentic RAG）成本更高，**先把朴素 RAG + 重排做到位**再上。
+
+→ [5.1](/ch5-deep-dives/) · [5.4](/ch5-deep-dives/document-processing) · [5.17](/ch5-deep-dives/rag-advanced)
 
 ---
 
@@ -151,9 +156,11 @@ Prompt Engineering 能解决吗？
    ├─ 数据敏感 / 要自主 / 有显卡 → 本地 LoRA（5.15）
    └─ 图省事 / 没 GPU            → 云端 SFT（5.14）
 想要小模型逼近大模型？          → 蒸馏
+RAG 召回不准、想动检索模型？    → 先加通用 Reranker；
+                                  领域术语特殊才微调 Embedding（5.18，换模型要重算全库向量）
 ```
 
-> 先穷尽 Prompt/RAG，确实卡住才微调；先用小数据验证收益再扩。→ [5.16](/ch5-deep-dives/finetuning-cases)
+> 先穷尽 Prompt/RAG，确实卡住才微调；先用小数据验证收益再扩。→ [5.16](/ch5-deep-dives/finetuning-cases) · [5.18](/ch5-deep-dives/finetuning-retrieval)
 
 ---
 
