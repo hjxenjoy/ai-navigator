@@ -124,6 +124,8 @@ export default withPwa(withMermaid(defineConfig({
           { text: '2.16 AI 对话设计模式', link: '/ch2-build-products/conversation-design' },
           { text: '2.17 AI 测试工程', link: '/ch2-build-products/ai-testing' },
           { text: '2.18 数据飞轮', link: '/ch2-build-products/data-flywheel' },
+          { text: '2.19 Batch API：异步批处理降本 50%', link: '/ch2-build-products/batch-api' },
+          { text: '2.20 Prompt 版本管理', link: '/ch2-build-products/prompt-management' },
         ],
       },
       {
@@ -137,6 +139,7 @@ export default withPwa(withMermaid(defineConfig({
           { text: '3.5 怎么读 AI 论文', link: '/ch3-under-the-hood/read-papers' },
           { text: '3.6 位置编码与长上下文 🔴', link: '/ch3-under-the-hood/context-window-limits' },
           { text: '3.7 量化与模型压缩', link: '/ch3-under-the-hood/quantization' },
+          { text: '3.8 长上下文 vs RAG：选哪个', link: '/ch3-under-the-hood/long-context-vs-rag' },
         ],
       },
       {
@@ -205,6 +208,14 @@ export default withPwa(withMermaid(defineConfig({
               { text: '5.15 微调·本地 LoRA 与 Ollama', link: '/ch5-deep-dives/finetuning-local' },
               { text: '5.16 微调·案例集与决策', link: '/ch5-deep-dives/finetuning-cases' },
               { text: '5.18 微调·Embedding 与 Reranker', link: '/ch5-deep-dives/finetuning-retrieval' },
+            ],
+          },
+          {
+            text: '工程优化（5.21–5.22）',
+            collapsed: true,
+            items: [
+              { text: '5.21 LLM Router：让对的请求找到对的模型', link: '/ch5-deep-dives/llm-router' },
+              { text: '5.22 合成数据生成：用 AI 造训练数据', link: '/ch5-deep-dives/synthetic-data' },
             ],
           },
         ],
