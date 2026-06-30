@@ -100,6 +100,7 @@ export default withPwa(withMermaid(defineConfig({
           { text: '1.13 自托管推理部署 🔴', link: '/ch1-llm-engineering/self-hosting' },
           { text: '⭐ 1.14 结构化输出的可靠实践', link: '/ch1-llm-engineering/structured-output' },
           { text: '1.15 Embedding 模型选型指南', link: '/ch1-llm-engineering/embedding-models' },
+          { text: '⭐ 1.16 Prompt Caching：让重复内容不重复计费', link: '/ch1-llm-engineering/prompt-caching' },
         ],
       },
       {
@@ -126,6 +127,7 @@ export default withPwa(withMermaid(defineConfig({
           { text: '2.18 数据飞轮', link: '/ch2-build-products/data-flywheel' },
           { text: '2.19 Batch API：异步批处理降本 50%', link: '/ch2-build-products/batch-api' },
           { text: '2.20 Prompt 版本管理', link: '/ch2-build-products/prompt-management' },
+          { text: '⭐ 2.21 Agent 安全：Prompt Injection 进阶威胁', link: '/ch2-build-products/agent-security' },
         ],
       },
       {
@@ -146,6 +148,7 @@ export default withPwa(withMermaid(defineConfig({
         text: '第 4 章 · MCP 与 Agent 生态',
         collapsed: true,
         items: [
+          { text: '⭐ 什么是 Agentic AI', link: '/ch4-agent-mcp/agentic-intro' },
           { text: '⭐ 4.1 MCP 是什么，为什么重要', link: '/ch4-agent-mcp/' },
           { text: '⭐ 4.2 用现有 MCP Server', link: '/ch4-agent-mcp/use-mcp' },
           { text: '4.3 自己写 MCP Server', link: '/ch4-agent-mcp/build-mcp' },
