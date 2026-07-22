@@ -166,6 +166,11 @@ export default withPwa(withMermaid(defineConfig({
           { text: '4.15 角色演进：Prompter 到 Graph Engineer', link: '/ch4-agent-mcp/engineer-roles' },
           { text: '4.16 Graph 编排深入：State Schema 🔴', link: '/ch4-agent-mcp/graph-engineering' },
           { text: '4.17 极简 Harness 解剖：Pi 🔴', link: '/ch4-agent-mcp/pi-harness' },
+          { text: '4.18 Pi 源码解剖（一）：四层架构', link: '/ch4-agent-mcp/pi-source-architecture' },
+          { text: '4.19 Pi 源码解剖（二）：Agent Loop', link: '/ch4-agent-mcp/pi-source-agent-loop' },
+          { text: '4.20 Pi 源码解剖（三）：工具系统', link: '/ch4-agent-mcp/pi-source-tools' },
+          { text: '4.21 Pi 源码解剖（四）：消息与会话树', link: '/ch4-agent-mcp/pi-source-session-tree' },
+          { text: '4.22 Pi 源码解剖（五）：扩展系统', link: '/ch4-agent-mcp/pi-source-extensions' },
         ],
       },
       {

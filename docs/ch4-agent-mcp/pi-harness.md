@@ -10,8 +10,8 @@
 
 事实速览：
 
-- 开源（MIT），代码在 `pi-mono` monorepo，分层清晰：`pi-ai`（多模型统一 API）→ `pi-agent-core`（Agent 运行时：工具调用 + 状态管理）→ `pi-coding-agent`（交互式 CLI）
-- 支持 15+ 模型提供商（Anthropic、OpenAI、Google、Bedrock、Ollama 等），会话中用 `/model` 随时切换
+- 开源（MIT），代码在 [earendil-works/pi](https://github.com/earendil-works/pi) monorepo（原 `badlogic/pi-mono`），分层清晰：`pi-ai`（多模型统一 API）→ `pi-agent-core`（Agent 运行时：工具调用 + 状态管理）→ `pi-coding-agent`（交互式 CLI）
+- 支持 30+ 模型提供商（Anthropic、OpenAI、Google、Bedrock、Ollama 等，v0.81 源码 `KnownProvider` 枚举有 38 个），会话中用 `/model` 随时切换
 - 默认**不带** Sub-agents、Plan mode 这类"高级功能"——想要？自己造，或者装别人造好的包
 
 > 💡 **类比**：Claude Code 是**精装房**——拎包入住，格局动不了；Pi 是**户型极佳的毛坯房**——水电承重都设计好了，但墙刷什么色、要不要隔一间书房，全由你定。两种路线没有优劣，服务的是两种用户。
@@ -160,4 +160,6 @@ Pi 把 [4.9](./context-engineering) 的四个手法几乎全部做成了显式�
 
 ---
 
-下一阶段：[第 5 章 · 四大专题深入（RAG / MCP / Skill / 微调）](/ch5-deep-dives/)
+这一节讲的是"Pi 为什么这么设计"。如果你想知道这些设计在代码里长什么样——Agent Loop 几百行代码怎么写、树状会话在磁盘上怎么存、扩展热重载怎么实现——接下来的源码解剖系列（4.18–4.22）会带你逐层走读 Pi v0.81 的真实源码。
+
+下一节：[4.18 Pi 源码解剖（一）：四层架构与包结构](./pi-source-architecture)
