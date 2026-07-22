@@ -146,6 +146,8 @@ messages.push({ role: "tool", tool_call_id: call.id, content: result })
 
 > ⚠️ 框架帮你省事，但也藏起了细节。**先理解 Harness 这些零件在干嘛，再用框架**——否则框架一出问题你完全不知道哪儿坏了。很多团队最后选择自己写一个薄薄的 Harness，而不是扛着重框架。
 
+> 💡 **案例：两个极端的 Harness 产品**。Claude Code 代表"全配齐"路线——七个零件全内置，开箱即用；开源的 **Pi**（[pi.dev](https://pi.dev)）代表另一个极端"极简路线"——只焊死最核心的零件，Sub-agents、Plan mode 都不内置，留成接口让你自己造。两条路线对应两种用户，剖析见 [4.17](./pi-harness)。
+
 ---
 
 ## 🛠️ 实战练习：拆解你天天用的 Harness

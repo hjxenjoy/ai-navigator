@@ -240,6 +240,18 @@
 **易错**：视觉 AI 强项是语义理解而非像素精确；需要精确坐标/颜色值时用 Computer Use 或传统图像处理库，不要用视觉理解 API。
 :::
 
+::: tip 🃏 角色演进（Loop / Graph Engineer）
+**光谱**：Prompter（驾驭一句话）→ Context Engineer（一张桌面）→ Loop Engineer（一个循环）→ Graph Engineer（一张图）；四层嵌套非替代，上层出问题病根常在下层。
+**Loop**：设计"目标→执行→验证→纠偏"闭环，验证环节优先于重试次数。
+**Graph**：三件套 Node 切分 / Edge 流转 / State Schema；State 四原则——最小化、类型约束、按写入方分片、显式合并（reducer）。
+:::
+
+::: tip 🃏 极简 Harness（Pi）
+**核心**：Pi=开源极简 Agent Harness，哲学"Primitives, not features"——Sub-agents/Plan mode 不内置，用 TS 扩展自己造；Harness 本身可被 Agent 改造（改完 /reload 生效）。
+**亮点**：树状会话历史（/tree 回退分叉，会话即数据）；四种模式（交互/Print/RPC/SDK）；AGENTS.md+SYSTEM.md+可替换 Compaction=上下文工程机制化。
+**选型**：把活干完用全配齐（Claude Code），打造工具用可编程底座（Pi）。
+:::
+
 ---
 
 ## 第 5 章 · 深入与落地

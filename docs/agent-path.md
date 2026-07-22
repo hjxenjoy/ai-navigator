@@ -55,6 +55,7 @@ Agent = 会自己调工具、能记住上下文的 LLM。先把这两块底座�
 - [4.9 上下文工程](/ch4-agent-mcp/context-engineering) — 按需注入、压缩、隔离、用文件系统当外部记忆
 - [4.6 多 Agent 协作](/ch4-agent-mcp/multi-agent) — Orchestrator-Subagent、Handoff、共享状态
 - [4.7 AI 编程实战工作流](/ch4-agent-mcp/ai-coding-workflow) · [4.4 Claude Code 深度使用](/ch4-agent-mcp/claude-code) — 把 Agent 用在真实开发里
+- [4.15 角色演进](/ch4-agent-mcp/engineer-roles) → [4.16 Graph 编排深入](/ch4-agent-mcp/graph-engineering) → [4.17 极简 Harness 解剖：Pi](/ch4-agent-mcp/pi-harness) — 从"带 AI 干活"到"设计 Agent 系统与工具"
 
 ## ⑥ 生态：给 Agent 接上更多能力
 

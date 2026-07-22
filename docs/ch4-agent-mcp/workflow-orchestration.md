@@ -1,5 +1,7 @@
 # 4.12 AI 工作流编排
 
+> 💡 **角色视角**：这节讲的内容，就是行业里最近叫 **Graph Engineer（图工程师）** 的人每天做的事——设计节点、边、状态这三要素，让多 Agent 系统的结构可控。它和 Loop Engineer（[4.7](./ai-coding-workflow)，管单个循环）的关系，以及如何进阶，见 [4.15](./engineer-roles)；State Schema 的深入设计见 [4.16](./graph-engineering)。
+
 [4.6 多 Agent 协作](./multi-agent)讲的是"Orchestrator 调度 Subagent"。当任务逻辑更复杂——有条件分支、有并行、有循环、有人工介入点——就需要一套更结构化的编排方式：**工作流（Workflow）**。
 
 > 💡 **ReAct Loop vs Workflow 的区别**：ReAct（见 [2.3](../ch2-build-products/agent-patterns)）让模型**动态决定**下一步做什么；Workflow 是**你事先定义好**执行路径，模型在每个节点上执行具体任务。两者不是对立的——复杂产品往往外层是 Workflow，每个节点内部是一个小 ReAct Agent。

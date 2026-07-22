@@ -97,6 +97,9 @@ Anthropic 训练 Claude 的方法：先写下一组原则（"宪法"），让 AI
 **Context Compression（上下文压缩）**  
 当对话太长超出上下文窗口时，自动把早期对话压缩成摘要的机制。
 
+**Context Engineer（上下文工程师）**  
+一种工程师角色定位：工作对象不是单条 Prompt，而是模型每轮"看得见什么"。核心问题是上下文窗口里每一步该摆什么、怎么摆、何时清理。详见 [4.9](/ch4-agent-mcp/context-engineering)、[4.15](/ch4-agent-mcp/engineer-roles)。
+
 **Context Window（上下文窗口）**  
 AI 每次处理时能"看到"的内容总量上限，以 Token 计算。超出这个范围的内容 AI 就"看不见"了。
 
@@ -175,6 +178,9 @@ AI 请求执行特定工具/函数的机制，和 Tool Use 是同一回事（Ope
 
 **GPU（图形处理器）**  
 最初用于游戏画面渲染，因为擅长并行计算，现在被用于 AI 训练和推理。训练大模型需要数千块 GPU。
+
+**Graph Engineer（图工程师）**  
+一种工程师角色定位：工作对象是多 Agent / 多节点的编排图，核心技能是 Node 切分、Edge 控制流、State Schema 设计三件套，让系统结构可控、可调试。可看作 Loop Engineer 在系统架构层面的延伸。详见 [4.12](/ch4-agent-mcp/workflow-orchestration)、[4.16](/ch4-agent-mcp/graph-engineering)。
 
 **GraphRAG（图谱增强检索）**  
 RAG 进阶范式：离线先用 LLM 把文档抽成"实体 + 关系"知识图谱并生成社区摘要，于是能回答朴素 RAG 答不了的全局型、跨文档关系型问题。代价是建库成本高。详见 [5.17](/ch5-deep-dives/rag-advanced)。
@@ -274,6 +280,9 @@ GGUF 量化格式中的一种混合精度方案（如 Q4_K_M、Q5_K_S）。K 表
 **LLM Router（模型路由）**  
 根据请求的复杂度或类型，自动分配到最合适模型的中间层。简单问题路由到小模型（便宜快速），复杂推理路由到大模型（准确但贵）。代表实现：RouteLLM、LiteLLM Router、自定义规则路由。目标是在相同效果下大幅降低成本。
 
+**Loop Engineer（循环工程师）**  
+一种工程师角色定位：工作对象是人机协作的闭环——目标怎么定义、结果怎么验证、错了怎么纠偏迭代。核心是让"AI 干活"的循环可控，标志性能力是建立客观验证环节而非堆重试。详见 [4.7](/ch4-agent-mcp/ai-coding-workflow)、[4.15](/ch4-agent-mcp/engineer-roles)。
+
 **LoRA（Low-Rank Adaptation）**  
 高效的 Fine-tuning 方法，只训练少量新参数，大幅降低训练成本。
 
@@ -343,6 +352,9 @@ vLLM 的核心技术：把每个请求占的 KV Cache 像操作系统管内存�
 
 **Perplexity（困惑度）**  
 衡量模型"预测这段文字有多难"的指标。困惑度越低，说明这段文字对模型来说越"意料之中"，越符合它训练时见过的语言规律。通常用来对比不同模型的语言能力。你在工程里很少直接用到它，但看评测报告会见到。
+
+**Pi**  
+一个开源的极简 Agent Harness（minimal agent harness，[pi.dev](https://pi.dev)）。设计哲学是"Primitives, not features"——不内置 Sub-agents、Plan mode 等工作流决策，而是提供 TypeScript 扩展、Skills、Prompt 模板等零件让用户自己组装；特色还有树状会话历史和四种运行模式（交互/Print/RPC/SDK）。详见 [4.17](/ch4-agent-mcp/pi-harness)。
 
 **Plan Tracking（计划追踪）**  
 把任务拆成待办清单，做一项勾一项，让 Agent 时刻看见总目标和进度，防止长任务跑偏忘事。Claude Code 的待办清单就是。
@@ -439,6 +451,9 @@ Attention 的一种形式，序列中每个位置都能"关注"其他所有位�
 
 **SOP（Standard Operating Procedure，标准作业流程）**  
 本是企业管理术语（工厂、客服都有 SOP），被搬进 Agent 圈，指你写给 Agent 的"标准流程说明书"——把一个反复要做的复杂任务，拆成带判断分支的固定步骤让它照做（"先做 A；遇到 X 就停下来问；否则做 B"）。就像麦当劳后厨墙上贴的"汉堡制作七步法"，新人照着做就不会错；SOP 就是给 Agent 的这张图。让 Agent 稳定干活，往往不是靠更花哨的提示词，而是把人类老手的流程显式写下来。落地形式：写进 System Prompt / `CLAUDE.md`、做成 [Skill](/ch5-deep-dives/skills-intro)、或对确定性步骤直接写成代码。注意 SOP ≠ 一段堆满规则的长提示，关键是写清"什么时候该停、该问、该交接"（呼应 [2.4 Agent 失控](/ch2-build-products/agent-failure)）。
+
+**State Schema（状态模式）**  
+工作流/多 Agent 编排中，对跨节点共享状态（State）的字段、类型、读写方、合并方式（Reducer）的显式定义。相当于节点之间的"交接单规格"，是 Graph Engineer 的核心设计对象，直接决定系统是否透明可调试。详见 [4.16](/ch4-agent-mcp/graph-engineering)。
 
 **Stop Sequence（停止序列）**  
 当 AI 生成到这个特定字符串时立刻停止输出。

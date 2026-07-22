@@ -163,6 +163,9 @@ export default withPwa(withMermaid(defineConfig({
           { text: '4.12 AI 工作流编排 🔴', link: '/ch4-agent-mcp/workflow-orchestration' },
           { text: '4.13 代码执行沙箱 🔴', link: '/ch4-agent-mcp/code-sandbox' },
           { text: '4.14 多模态 Agent：视觉理解 + 行动', link: '/ch4-agent-mcp/multimodal-agent' },
+          { text: '4.15 角色演进：Prompter 到 Graph Engineer', link: '/ch4-agent-mcp/engineer-roles' },
+          { text: '4.16 Graph 编排深入：State Schema 🔴', link: '/ch4-agent-mcp/graph-engineering' },
+          { text: '4.17 极简 Harness 解剖：Pi 🔴', link: '/ch4-agent-mcp/pi-harness' },
         ],
       },
       {

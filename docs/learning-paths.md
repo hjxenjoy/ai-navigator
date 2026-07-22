@@ -107,6 +107,9 @@
 | [4.12 AI 工作流编排](/ch4-agent-mcp/workflow-orchestration) | 🔴 | 💡 | 复杂多步骤流程的自动化 |
 | [4.13 代码执行沙箱](/ch4-agent-mcp/code-sandbox) | 🔴 | 💡 | 安全执行 AI 生成代码 |
 | [4.14 多模态 Agent：视觉理解 + 行动](/ch4-agent-mcp/multimodal-agent) | 🟡 | 💡 | 截图分析、图表提取、视觉 Agent |
+| [4.15 角色演进：Prompter 到 Graph Engineer](/ch4-agent-mcp/engineer-roles) | 🟢 | 📌 | Loop/Graph Engineer 是什么，给自己定位 |
+| [4.16 Graph 编排深入：State Schema](/ch4-agent-mcp/graph-engineering) | 🔴 | 💡 | 多节点系统的状态设计内功 |
+| [4.17 极简 Harness 解剖：Pi](/ch4-agent-mcp/pi-harness) | 🔴 | 💡 | 从 Pi 看 Harness 设计的另一条路线 |
 
 ### 第 5 章 · 四大专题深入
 
