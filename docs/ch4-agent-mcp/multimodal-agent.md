@@ -1,5 +1,7 @@
 # 4.14 多模态 Agent：视觉理解 + 行动
 
+> 🕐 内容截至 2026-07
+
 Agent 不只是"读文字、调工具"。当你给 Agent 接上视觉能力，它能看截图、看图表、看 UI 界面，然后决定下一步动作。这是当前 Agent 能力扩展最快的方向之一。
 
 ---
@@ -23,7 +25,7 @@ Agent 不只是"读文字、调工具"。当你给 Agent 接上视觉能力，�
 
 ## 多模态 API 基础
 
-主流模型（Claude、GPT-4o）都支持图像输入：
+主流模型（Claude、GPT-5 系列、Gemini）都支持图像输入：
 
 ```javascript
 import Anthropic from '@anthropic-ai/sdk'

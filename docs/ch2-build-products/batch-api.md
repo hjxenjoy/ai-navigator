@@ -1,5 +1,7 @@
 # 2.19 Batch API：用异步批处理降低 50% 成本
 
+> 🕐 内容截至 2026-07｜涉及版本：GPT-5.4 / GPT-5.4 mini
+
 假设你手上有 10 万条用户评论，需要逐条生成摘要或打情感标签。如果一条条同步调 API：
 
 - **慢**：串行调用，10 万条 × 平均 1 秒 = 接近 28 小时
@@ -44,7 +46,7 @@ OpenAI 和 Anthropic 都提供 Batch API，核心逻辑是一样的：
 
 ## 成本对比
 
-| 方式 | 价格（以 GPT-4o 为例） | 响应时间 |
+| 方式 | 价格（以 GPT-5.4 为例） | 响应时间 |
 |------|----------------------|---------|
 | 同步 API（标准价） | input: $2.50 / 1M tokens | 秒级 |
 | Batch API | input: $1.25 / 1M tokens | ≤ 24 小时 |
@@ -80,7 +82,7 @@ const lines = articles.map((article, i) => {
     method: "POST",
     url: "/v1/chat/completions",
     body: {
-      model: "gpt-4o-mini",             // 批处理通常用小模型降成本
+      model: "gpt-5.4-mini",            // 批处理通常用小模型降成本
       messages: [
         {
           role: "user",
@@ -270,7 +272,7 @@ const lines = products.map(p =>
     method: "POST",
     url: "/v1/chat/completions",
     body: {
-      model: "gpt-4o-mini",
+      model: "gpt-5.4-mini",
       messages: [{
         role: "user",
         content: `请用 50 字以内总结以下产品描述：\n${p.description}`
@@ -290,11 +292,11 @@ console.log("生成完毕，共", lines.length, "条")
 - `batch-output.json` 中有 1000 条摘要，键为 `product-0` 到 `product-999`
 - 统计 token 消耗，与同步调用价格对比（Batch 价格应为标准价的 50%）
 
-**成本估算**（以 gpt-4o-mini 为例）：
+**成本估算**（以 gpt-5.4-mini 为例，价格 input $0.75 / output $4.50 每 1M tokens）：
 - 每条请求约 100 input tokens + 30 output tokens
 - 1000 条：100,000 input + 30,000 output tokens
-- 同步价格：约 $0.022
-- Batch 价格：约 **$0.011**，省了一半
+- 同步价格：约 $0.21
+- Batch 价格：约 **$0.11**，省了一半
 
 ---
 

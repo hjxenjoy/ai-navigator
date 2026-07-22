@@ -1,5 +1,7 @@
 # 4.2 用现有 MCP Server
 
+> 🕐 内容截至 2026-07
+
 Claude Code 通过配置文件来连接 MCP Server。这一节讲怎么找到、安装和配置现有的 MCP Server。
 
 ## 怎么添加 MCP Server
@@ -99,7 +101,7 @@ claude mcp add --transport http my-service https://example.com/mcp
 
 很多远程 Server 用 **OAuth** 登录（不是填 token，而是浏览器授权）。在 Claude Code 里输入 `/mcp`，它会引导你完成浏览器登录。
 
-> ⚠️ 早期的 SSE 传输方式已被 HTTP 取代，新接远程 Server 用 `--transport http`。
+> ⚠️ 早期的 SSE 传输方式已被 HTTP 取代，新接远程 Server 用 `--transport http`（旧 HTTP+SSE 传输在 2026-07-28 版协议中已被正式标记为废弃）。
 
 ---
 
@@ -116,7 +118,8 @@ claude mcp add --transport http my-service https://example.com/mcp
 
 ## 哪里找 MCP Server
 
-- **官方列表**：github.com/modelcontextprotocol/servers
+- **官方 Registry**：registry.modelcontextprotocol.io — 官方维护的 Server 注册表
+- **官方示例仓库**：github.com/modelcontextprotocol/servers
 - **MCP.so**：第三方 MCP 市场
 - **Smithery.ai**：MCP Server 搜索和发现
 

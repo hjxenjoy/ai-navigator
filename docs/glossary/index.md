@@ -164,7 +164,7 @@ Agent 每行动一步后，用客观手段（测试、linter、LLM 评判、校�
 在预训练模型的基础上，用你自己的数据继续训练，让模型适应特定任务或风格。
 
 **Foundation Model（基础模型/大模型）**  
-经过大规模预训练的模型，可以作为各种下游任务的起点。Claude、GPT-4 都是 Foundation Model。
+经过大规模预训练的模型，可以作为各种下游任务的起点。Claude、GPT 系列都是 Foundation Model。
 
 **Function Calling（函数调用）**  
 AI 请求执行特定工具/函数的机制，和 Tool Use 是同一回事（OpenAI 叫 Function Calling，Anthropic 叫 Tool Use）。
@@ -230,7 +230,7 @@ AI 一本正经地输出错误信息。比如编造不存在的引用、给出�
 用训练好的模型生成输出的过程（相对于训练）。你每次问 AI 问题，它"回答"就是在做推理。
 
 **Instruct Model（指令模型）**  
-经过 SFT 微调、能按照指令操作的模型。你日常用的 Claude、GPT-4 都是 Instruct Model。
+经过 SFT 微调、能按照指令操作的模型。你日常用的 Claude、GPT 系列都是 Instruct Model。
 
 **Isolation（隔离）**  
 让子任务在各自独立的上下文/环境里跑，互不污染，只把结论带回主线程。如 Subagent 独立上下文、Worktree 隔离目录。
@@ -309,7 +309,7 @@ Agent 保存和访问信息的机制，分工作记忆（当前上下文）、�
 模型架构，包含多个"专家"子网络，每次处理只激活部分专家，在保持能力的同时降低计算成本。
 
 **Multimodal（多模态）**  
-能处理多种类型数据（文字、图片、音频、视频）的模型。Claude 3、GPT-4V 都是多模态模型。
+能处理多种类型数据（文字、图片、音频、视频）的模型。现在的主流模型（Claude、GPT、Gemini）基本都是多模态模型。
 
 ---
 
@@ -536,7 +536,7 @@ TTS 里可选的"嗓音"——不同性别、年龄、风格的预置发音人�
 专门存储和搜索向量的数据库，支持高效的相似性搜索。
 
 **VLM（Vision Language Model，视觉语言模型）**  
-能同时理解图片和文字的模型，如 GPT-4V、Claude 3。
+能同时理解图片和文字的模型，如 Claude 4 系列、GPT-5 系列。
 
 **VRAM（显存）**  
 GPU 的内存，运行大模型需要大量 VRAM。

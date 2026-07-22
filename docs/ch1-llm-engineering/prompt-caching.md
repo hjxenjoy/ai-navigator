@@ -1,5 +1,7 @@
 # 1.16 Prompt Caching：让重复内容不重复计费
 
+> 🕐 内容截至 2026-07｜涉及版本：deepseek-v4-flash / claude-sonnet-4-6
+
 如果你的 System Prompt 有 2000 个 Token，每天调用 5000 次，光这一项就是 1000 万 Token 的输入费用——而这 2000 个 Token 的内容每次都完全一样。
 
 Prompt Caching 就是为了解决这个浪费。
@@ -44,7 +46,7 @@ Prompt Caching 就是为了解决这个浪费。
 
 ```javascript
 const response = await openai.chat.completions.create({
-  model: 'deepseek-chat',
+  model: 'deepseek-v4-flash',   // 旧别名 deepseek-chat 已于 2026-07-24 被官方弃用
   messages: [
     {
       role: 'system',

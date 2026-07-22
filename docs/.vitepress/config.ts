@@ -79,6 +79,7 @@ export default withPwa(withMermaid(defineConfig({
           { text: '⭐ 0.3 AI 能做什么，不能做什么', link: '/ch0-mindset/capabilities' },
           { text: '⭐ 0.4 当前技术版图', link: '/ch0-mindset/landscape' },
           { text: '0.5 国产大模型生态', link: '/ch0-mindset/china-llm' },
+          { text: '0.6 炒作周期复盘：退潮的技术', link: '/ch0-mindset/hype-cycle' },
         ],
       },
       {
@@ -171,6 +172,8 @@ export default withPwa(withMermaid(defineConfig({
           { text: '4.20 Pi 源码解剖（三）：工具系统', link: '/ch4-agent-mcp/pi-source-tools' },
           { text: '4.21 Pi 源码解剖（四）：消息与会话树', link: '/ch4-agent-mcp/pi-source-session-tree' },
           { text: '4.22 Pi 源码解剖（五）：扩展系统', link: '/ch4-agent-mcp/pi-source-extensions' },
+          { text: '4.23 Agent 协议全景：MCP/A2A/AG-UI', link: '/ch4-agent-mcp/agent-protocols' },
+          { text: '4.24 云端异步 Coding Agent', link: '/ch4-agent-mcp/async-coding-agents' },
         ],
       },
       {

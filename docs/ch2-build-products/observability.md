@@ -1,5 +1,7 @@
 # 2.9 可观测性与线上监控
 
+> 🕐 内容截至 2026-07｜涉及版本：OpenTelemetry GenAI 语义约定 v1.42（仍处 experimental 阶段）
+
 [2.5 评估](./evaluation) 解决的是"上线前怎么知道它好不好"，这一节解决"**上线后怎么知道它还好不好**"。传统服务你盯 CPU、错误率、延迟就够了；AI 服务多一层麻烦——输入输出都是自然语言、结果还不确定，光看 HTTP 200 完全看不出它有没有在胡说。
 
 > 💡 **类比**：传统监控像看体温计——数字超标就报警。AI 监控像给一个新来的客服装监控摄像头——你不只要知道"他有没有迟到"（延迟/成功率），还要能回放"他到底跟客户说了什么"（每次请求的输入输出），以及"他最近回答质量是不是下滑了"（线上质量评估）。
@@ -70,7 +72,19 @@ async function handleQuery(question) {
 }
 ```
 
-**不想自己造轮子**：[Langfuse](https://langfuse.com)（开源、可自托管，数据不出内网）是国内团队常用的选择，几行 SDK 就能把 trace、token、成本、线上评估都接上；LangSmith 类似但是闭源 SaaS。先用结构化日志手搓也完全够起步。
+**不想自己造轮子**：先用行业标准打点，再选后端。2026 年的默认 instrumentation 方式，是按 **OpenTelemetry GenAI 语义约定**（OTel GenAI semantic conventions，v1.42 起定义，截至 2026-07 仍标记为 experimental，字段名未来可能微调）发 span——它是厂商中立的开放标准，用 `gen_ai.operation.name` 区分 AI 特有的操作类型，并配一套 `gen_ai.*` 属性：
+
+| `gen_ai.operation.name` | 对应环节 |
+|---|---|
+| `chat` / `generate_content` | LLM 推理调用 |
+| `invoke_agent` | 一次 Agent 运行（多轮循环的根 span） |
+| `execute_tool` | 单次工具调用（挂在 `invoke_agent` 下） |
+| `retrieve` | RAG 检索 |
+| `embeddings` | 向量嵌入 |
+
+常用属性：`gen_ai.provider.name`（厂商）、`gen_ai.request.model`、`gen_ai.usage.input_tokens` / `output_tokens` 等。好处是**打一次点，随便换后端**：[Langfuse](https://langfuse.com)（开源、可自托管，数据不出内网，国内团队常用）、[Arize Phoenix](https://phoenix.arize.com)（开源）、Datadog 都直接接受 OTel span，几行 SDK 就能把 trace、token、成本、线上评估接上；LangSmith 类似但是闭源 SaaS。先用结构化日志手搓也完全够起步。
+
+> ⚠️ **现状差距**：据 Gartner 等第三方估计，只有约 15% 的生产级 AI 部署做到了 per-step（逐步）的 token 用量 instrumentation——也就是大多数团队连"这个 Agent 哪一步在烧钱"都答不上来。另一个推手是合规：EU AI Act 第 12 条要求高风险 AI 系统具备自动日志记录能力，相关义务自 2026 年起进入可执行阶段——**日志不再是可选项，而正在变成法定要求**。
 
 ---
 
@@ -147,8 +161,10 @@ console.log("总 Token:", sum("promptTokens") + sum("completionTokens"))
 1. AI 可观测性分三层：基础指标 → 链路追踪 Trace → 质量监控，多数团队只做了第一层
 2. 每次调用都记 `response.usage`（Token/成本）和耗时；延迟要看 **P95/P99**，平均值会骗人
 3. 一次任务常是多步调用，用 `traceId` 串成调用树，出问题才能定位是检索、拼 Prompt 还是生成的锅
-4. 质量会**无报错地悄悄退化**——必须做线上抽样评估 + 用户反馈，把质量趋势当成核心指标
-5. 自托管首选 Langfuse（数据不出内网）；告警至少覆盖成本突增、错误率、质量跌破基线
+4. instrumentation 默认按 OpenTelemetry GenAI 语义约定打点（`gen_ai.*` 属性 + `invoke_agent`/`execute_tool`/`chat`/`retrieve` 等 span 类型），Langfuse/Phoenix/Datadog 都能直接消费，换后端不用重打点
+5. 质量会**无报错地悄悄退化**——必须做线上抽样评估 + 用户反馈，把质量趋势当成核心指标
+6. 合规在收紧：EU AI Act 第 12 条的日志要求 2026 年起可执行，逐步 token 用量监控目前只有约 15% 的生产部署做到（据第三方估计），早做早上岸
+7. 自托管首选 Langfuse（数据不出内网）；告警至少覆盖成本突增、错误率、质量跌破基线
 
 ---
 

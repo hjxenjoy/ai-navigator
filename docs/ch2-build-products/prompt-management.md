@@ -1,5 +1,7 @@
 # 2.20 Prompt 版本管理：把 Prompt 当代码来管
 
+> 🕐 内容截至 2026-07｜涉及版本：GPT-5.4 mini
+
 大多数团队的 Prompt 管理现状是这样的：
 
 ```javascript
@@ -159,7 +161,7 @@ async function chat(userMessage) {
   // const systemPrompt = loader.load("support-system", "2.0", { productName: "..." })
 
   const response = await client.chat.completions.create({
-    model: "gpt-4o-mini",
+    model: "gpt-5.4-mini",
     messages: [
       { role: "system", content: systemPrompt },
       { role: "user", content: userMessage }
@@ -320,7 +322,7 @@ async function chat(userId, userMessage) {
   )
 
   const response = await client.chat.completions.create({
-    model: "gpt-4o-mini",
+    model: "gpt-5.4-mini",
     messages: [
       { role: "system", content: systemPrompt },
       { role: "user", content: userMessage }

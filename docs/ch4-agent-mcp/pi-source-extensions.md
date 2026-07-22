@@ -403,4 +403,4 @@ export default function (pi: ExtensionAPI) {
 
 ---
 
-下一阶段：[第 5 章 · 四大专题深入（RAG / MCP / Skill / 微调）](/ch5-deep-dives/)
+下一节：[4.23 Agent 协议全景：MCP / A2A / AG-UI / Skills](./agent-protocols)

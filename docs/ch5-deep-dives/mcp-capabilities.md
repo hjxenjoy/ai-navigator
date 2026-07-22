@@ -1,5 +1,7 @@
 # 5.6 MCP·三种能力深入与高层 SDK
 
+> 🕐 内容截至 2026-07｜涉及版本：MCP 2025-11-25（当前正式版）
+
 [4.3](/ch4-agent-mcp/build-mcp) 用底层 `Server` API 手写了一个 MCP Server，帮你看清协议。这一节换成**高层 `McpServer` SDK**（实际项目用它，代码短一半），并把 MCP 的能力讲全：Tools、Resources、Prompts，以及两个进阶能力 Sampling 和 Elicitation。
 
 ## 先升级到高层 SDK
@@ -101,6 +103,10 @@ const result = await server.server.createMessage({
 
 > 💡 **比喻**：Server 是个不会写文案的工人，但它可以"借用"客户端那位会写的同事（模型）来帮它生成。好处：Server 保持轻量、不持有密钥；坏处：不是所有客户端都支持 Sampling。
 
+Sampling 早已是正式协议能力（2025-11-25 版还支持让被借用的模型做 tool calling）。
+
+> ⚠️ **注意方向变化**：在 2026-07-28 版协议中，Sampling 被标记为**废弃（deprecated）**，官方建议的替代方案是 Server 直接集成 LLM 提供商的 API（废弃后有至少 12 个月的保留窗口，现有代码不会立刻坏）。新写的 Server 如果强依赖"借客户端的模型"，要留意这个趋势，详见 [5.7 新版前瞻](./mcp-production)。
+
 ---
 
 ## 进阶能力二：Elicitation（中途向用户要信息）
@@ -118,6 +124,18 @@ const r = await server.server.elicitInput({
 
 > ⚠️ Elicitation 必须是"用户/Agent 发起的动作的延续"，不会凭空弹窗打扰用户。它让交互更自然（缺啥问啥），但同样依赖客户端支持。
 
+2025-11-25 版还新增了 **URL 模式（URL mode）的 Elicitation**：涉及敏感信息（密码、API key、支付授权）时，Server 给用户一个 URL，用户在浏览器里直接和服务方完成交互，敏感凭据**不经过客户端和模型上下文**。规则很简单：**敏感凭据必须走 URL 模式**，别用普通表单字段收集。
+
+---
+
+## 扩展能力：MCP Apps（工具返回交互式界面）
+
+2026 年初落地的 **MCP Apps**（SEP-1865，MCP 首个官方扩展）打破了"工具只能返回文本/结构化数据"的限制：工具可以声明一个 HTML UI 模板，宿主（Claude、VS Code、Goose 等已支持）把它渲染在**沙箱 iframe** 里——确认表单、数据图表、运维仪表盘都可以做成可点可填的界面。
+
+- 模板提前声明，宿主可以在渲染前预取、缓存和安全审查
+- 界面里用户的操作（点按钮、提交表单）仍走 MCP 的 JSON-RPC 通道，和直接调工具一样经过审计与确认
+- 这是**扩展**而非核心能力，客户端不支持时会优雅降级为普通文本结果
+
 ---
 
 ## 能力速查
@@ -128,7 +146,8 @@ const r = await server.server.elicitInput({
 | **Resources** | 客户端读 Server | 提供只读数据 | 挂载文档、配置、记录 |
 | **Prompts** | 用户触发 | 预置提示模板 | 团队沉淀的工作流 |
 | **Sampling** | Server 调客户端模型 | 借客户端的 LLM 生成 | Server 内部需要"智能"但不想接模型 |
-| **Elicitation** | Server 问用户 | 中途索要缺失信息 | 缺参数时不失败、改追问 |
+| **Elicitation** | Server 问用户 | 中途索要缺失信息 | 缺参数时不失败、改追问（敏感凭据走 URL 模式） |
+| **MCP Apps**（扩展） | Server 出 UI，宿主渲染 | 返回沙箱 iframe 里的交互式界面 | 确认表单、图表、仪表盘 |
 
 ---
 
@@ -149,9 +168,9 @@ const r = await server.server.elicitInput({
 
 1. 实际项目用高层 `McpServer` + `registerTool/Resource/Prompt`，参数用 Zod，代码比底层短一半
 2. Tool=动作（AI 调）、Resource=只读数据（客户端挂）、Prompt=预置模板（用户触发）
-3. Sampling：Server 反向借客户端的模型生成，自己保持轻量、不持密钥
-4. Elicitation：Server 中途向用户要缺失信息，而不是直接失败
-5. Sampling/Elicitation 依赖客户端支持，用前确认目标客户端是否支持
+3. Sampling：Server 反向借客户端的模型生成——但 2026-07-28 版已将其标记废弃，新代码优先考虑直接调 LLM API
+4. Elicitation：Server 中途向用户要缺失信息；敏感凭据必须走 URL 模式，不进模型上下文
+5. MCP Apps（SEP-1865 扩展）让工具返回沙箱 iframe 渲染的交互式界面，"MCP 只传文本"已过时；以上进阶能力都依赖客户端支持，用前先确认
 
 ---
 

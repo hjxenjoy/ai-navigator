@@ -1,5 +1,7 @@
 # 4.4 Claude Code 深度使用
 
+> 🕐 内容截至 2026-07｜涉及版本：Claude Opus 4.8 / Sonnet 5
+
 你已经在用 Claude Code，但可能还没完全发挥它的能力。这一节系统整理深度使用的方法。
 
 ## CLAUDE.md：项目级别的记忆
@@ -160,6 +162,21 @@ Claude Code 的 Worktree 功能利用了 Git 的 worktree 机制，让 Agent 在
 
 ---
 
+## 2026 演进：从"AI 结对编程"到"编排平台"
+
+2026 年上半年 Claude Code 的重心不是模型，而是**编排（Orchestration）**。2026-05-06 的 Code with Claude 开发者大会 keynote 一开场就明说"今天没有新模型"，全部篇幅给了 Agent 基础设施（Simon Willison 做了现场实录）。几个值得知道的演进：
+
+- **模型分层**：当前旗舰是 Claude Opus 4.8（2026 年 5 月底发布），2026-06-30 推出的 Claude Sonnet 5 以明显更低的价格接近 Opus 水平，成为大多数生产场景的默认选择——日常编码用 Sonnet 5，真正难的长程任务再上 Opus 4.8
+- **Agent Teams**：多个 Claude 实例并行工作，通过共享任务清单（而非直接消息）协调——你可以把它理解成本节前面 Subagent 机制的"多会话加强版"
+- **Routines**：把重复的 Claude Code 任务存成模板，跑在 Anthropic 云端按定时/API/GitHub 事件自动触发（2026 年 4 月以 research preview 推出）——等于"不用自己搭服务器的定时 CI 任务"
+- **Remote Agents**：任务在云端异步执行，你合上笔记本它也在跑，回来看结果
+- **Code Review + CI auto-fix**：自动审查 PR，CI 挂了自动定位并修
+- **Advisor 模式**：Opus 当"顾问"出主意、Sonnet 当"执行者"干活——用贵模型思考、便宜模型执行，是成本与质量权衡的官方答案
+
+> ⚠️ **常见误解**："AI 工具的进步 = 等下一个更强的模型"。2026 年的实际方向是：模型能力趋稳后，**编排层**（并行、定时、远程、自审查）带来的效率提升比换模型大得多。学会把一个任务拆给多个 Agent 跑，比苦等新模型更值钱。
+
+---
+
 ## 🛠️ 实战练习：给你的项目创建 CLAUDE.md
 
 **现在就做**：在你最常用的一个项目根目录里，创建一个 `CLAUDE.md` 文件。
@@ -200,6 +217,7 @@ Claude Code 的 Worktree 功能利用了 Git 的 worktree 机制，让 Agent 在
 2. Hooks 能让 Claude Code 完成任务后自动触发格式化、测试等操作
 3. 自定义斜杠命令可以固化你的工作流，一行命令触发复杂流程
 4. Permission 配置控制 AI 的操作边界，是安全使用 Agent 的关键
+5. 2026 年的演进方向是编排而非新模型：Opus 4.8 / Sonnet 5 分层选用，配合 Agent Teams、Routines、Remote Agents 把任务并行化、自动化
 
 ---
 

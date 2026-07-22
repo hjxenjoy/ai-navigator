@@ -1,5 +1,7 @@
 # 4.3 自己写 MCP Server
 
+> 🕐 内容截至 2026-07
+
 当现有的 MCP Server 不满足你的需求时，可以自己写一个。这比想象中简单。
 
 ## 最简单的 MCP Server（Node.js）
