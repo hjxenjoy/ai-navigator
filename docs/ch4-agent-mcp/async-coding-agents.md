@@ -147,4 +147,4 @@ git worktree add ../project-task-b -b task/update-docs
 
 ---
 
-下一阶段：[第 5 章 · 四大专题深入（RAG / MCP / Skill / 微调）](/ch5-deep-dives/)
+下一节：[4.25 Agent 系统的六条不变量](./agent-invariants)

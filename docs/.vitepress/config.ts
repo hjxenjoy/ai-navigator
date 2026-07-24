@@ -129,6 +129,7 @@ export default withPwa(withMermaid(defineConfig({
           { text: '2.19 Batch API：异步批处理降本 50%', link: '/ch2-build-products/batch-api' },
           { text: '2.20 Prompt 版本管理', link: '/ch2-build-products/prompt-management' },
           { text: '⭐ 2.21 Agent 安全：Prompt Injection 进阶威胁', link: '/ch2-build-products/agent-security' },
+          { text: '⭐ 2.22 Agent 轨迹评测', link: '/ch2-build-products/agent-evaluation' },
         ],
       },
       {
@@ -174,6 +175,7 @@ export default withPwa(withMermaid(defineConfig({
           { text: '4.22 Pi 源码解剖（五）：扩展系统', link: '/ch4-agent-mcp/pi-source-extensions' },
           { text: '4.23 Agent 协议全景：MCP/A2A/AG-UI', link: '/ch4-agent-mcp/agent-protocols' },
           { text: '4.24 云端异步 Coding Agent', link: '/ch4-agent-mcp/async-coding-agents' },
+          { text: '⭐ 4.25 Agent 系统的六条不变量 🔴', link: '/ch4-agent-mcp/agent-invariants' },
         ],
       },
       {

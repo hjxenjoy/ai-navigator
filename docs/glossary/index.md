@@ -232,8 +232,14 @@ AI 一本正经地输出错误信息。比如编造不存在的引用、给出�
 **Instruct Model（指令模型）**  
 经过 SFT 微调、能按照指令操作的模型。你日常用的 Claude、GPT 系列都是 Instruct Model。
 
+**Invariant（不变量）**  
+系统在任何时刻都必须为真的性质，破了就会出事——区别于"违反了不够优雅"的最佳实践。Agent 系统有六条核心不变量（格式止步于适配层、工具调用与结果恰好配对、截断参数不执行、完成顺序≠记录顺序、历史只追加、扩展边界即信任边界）。详见 [4.25](/ch4-agent-mcp/agent-invariants)。
+
 **Isolation（隔离）**  
 让子任务在各自独立的上下文/环境里跑，互不污染，只把结论带回主线程。如 Subagent 独立上下文、Worktree 隔离目录。
+
+**Interaction Group（交互组）**  
+上下文压缩时的原子单位：从一条 user 消息起，含它引发的全部工具调用与结果，到下一条 user 消息止。压缩边界只能落在组之间——切进组内部就会产生孤儿引用。详见 [4.9](/ch4-agent-mcp/context-engineering)。
 
 ---
 
@@ -339,6 +345,9 @@ Agent 保存和访问信息的机制，分工作记忆（当前上下文）、�
 
 **Orchestration（编排）**  
 协调多个 Agent 或工具协同工作的过程。
+
+**Orphaned Reference（孤儿引用）**  
+上下文里出现了找不到对应 `tool_use` 的 `tool_result`（或反之），API 会直接拒绝请求、整个会话当场崩溃。成因是压缩时切进了交互组内部。详见 [4.9](/ch4-agent-mcp/context-engineering)。
 
 ---
 
@@ -488,6 +497,9 @@ AI 生成一个 Token 就立刻发送，而不是等全部生成完再发送。�
 
 **Token（词元）**  
 AI 处理文字的最小单位，不等于一个字。中文每个汉字约 1-2 个 Token。
+
+**Trajectory Evaluation（轨迹评测）**  
+不只看 Agent 的最终输出，还检查它中间"怎么走过来的"——必经步骤、禁区行为、效率指标、不变量。一个删掉文件再凭记忆重写的 Agent 能通过所有最终状态检查，只有轨迹能抓住它。详见 [2.22](/ch2-build-products/agent-evaluation)。
 
 **Tokenization（词元化）**  
 把文字转换成 Token 序列的过程。

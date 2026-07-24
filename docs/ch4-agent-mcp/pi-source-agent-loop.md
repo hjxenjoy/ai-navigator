@@ -242,6 +242,38 @@ private async processEvents(event: AgentEvent): Promise<void> {
 
 这就是 4.17 说的"四种运行模式"能共用同一个引擎的原因：TUI 订阅事件渲染界面，Print 模式订阅事件逐行打印 JSON，RPC 模式订阅事件转发给远端进程——**Harness 对 UI 零假设，只承诺一份事件流**。
 
+### 关键区分：哪些进历史，哪些只是进度信号
+
+上面 10 种 `AgentEvent` 里，只有极少数会变成**下一轮上下文的一部分**。这个区分自己写 Harness 时极容易搞混，值得单独拎出来：
+
+| | 进入历史（canonical transcript） | 只是进度信号 |
+|---|---|---|
+| 有哪些 | user 消息、**已完成的** assistant 消息、tool result | `agent_start` / `turn_start` / `message_start` / `message_update` / `tool_execution_start` / `tool_execution_update` … |
+| 生命周期 | 写进 `state.messages`，落盘，参与下一轮请求 | 用完即弃，UI 渲染完就没了 |
+| 判据 | 它是"发生过的事实" | 它是"正在发生"的播报 |
+
+代码上这条线画得很清楚：只有 `message_end` 才把消息 push 进 `state.messages`（前面 `processEvents` 的 switch），`message_update` 携带的部分消息只是拿去刷新 `streamingMessage` 这个临时字段。**流式过程中那些半截消息，一条都不会进历史。**
+
+> ⚠️ **常见误解**："事件流就是对话历史，把事件都存下来就是会话记录。" 不是。事件流是**给 UI 看的实时播报**，历史是**给模型看的事实记录**，两者的粒度和寿命完全不同。把 `message_update` 也存进历史，你会得到同一条消息的几十份残缺副本；反过来只存最终回答、丢掉 tool result，模型下一轮就失去了"工具到底返回了什么"的唯一证据。
+
+### 谁是这件事的 owner：表达 / 调度 / 执行
+
+还有一个配套的心智模型：**每个事件都该能回答"这是谁产生的"**，而候选只有四个——`user` / `model` / `loop` / `tool`。
+
+这四个角色对应三件必须分开的事：
+
+- **表达**（model）：模型**提议**调用某个工具。它只是说想做，什么都还没发生
+- **调度**（loop）：循环**安排**这次调用——排队、并发、限流、检查 abort 信号，都在这层
+- **执行**（tool）：工具**真的动手**，返回环境的实际反馈
+
+Pi 的事件命名就带着这个归属：`message_*` 是 model 的表达，`turn_*` / `agent_*` 是 loop 的调度节拍，`tool_execution_*` 是 tool 的执行。
+
+想清楚这三层，很多设计问题会自动有答案：
+
+- **为什么 tool call 和 tool result 必须分成两条记录？** 因为一个是"模型想做"（表达），一个是"环境实际返回"（执行）。模型说"我读了文件"是它的说法，只有 tool result 才是证据。**最终回答本身什么都不证明**——这正是 [2.22](/ch2-build-products/agent-evaluation) 轨迹评测的立足点
+- **中断该拦在哪一层？** 调度层。所以 `AbortSignal` 由 loop 持有并往下传，而不是让模型或工具各自发明中断机制（下面"中断"一节就是这个设计的展开）
+- **重试该由谁负责？** 也是调度层。模型不该知道自己被重试了，工具也不该自己偷偷重试
+
 ---
 
 ## 终止、错误与中断

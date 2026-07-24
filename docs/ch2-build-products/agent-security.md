@@ -314,4 +314,4 @@ async function validateAgentAction(action) {
 - **最重要的防护**是最小权限——被注入后能做的最坏事越小越好；企业 MCP 授权取"Agent 权限 ∩ 用户权限"交集，走 OAuth 2.1
 - 100% 防注入不现实，安全要靠**权限 + 确认节点 + 审计日志**多层兜底
 
-下一节：[3.1 Transformer 与注意力机制](/ch3-under-the-hood/)
+下一节：[2.22 Agent 轨迹评测：只看答案是不够的](./agent-evaluation)

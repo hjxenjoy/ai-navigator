@@ -26,6 +26,7 @@ Agent = 会自己调工具、能记住上下文的 LLM。先把这两块底座�
 
 - [1.4 Tool Use 深度使用](/ch1-llm-engineering/tool-use) — 工具调用是 Agent 的"手脚"，没有它 Agent 只能说不能做
 - [1.5 多轮对话与状态管理](/ch1-llm-engineering/conversation) — 消息历史是 Agent 的"短期记忆"，决定它记得住多少
+- [4.10 Agent 长期记忆系统](/ch4-agent-mcp/long-term-memory) — 超出上下文窗口的"长期记忆"，让 Agent 跨会话记住东西
 
 ## ② 核心：Agent 循环与设计模式
 
@@ -39,6 +40,8 @@ Agent = 会自己调工具、能记住上下文的 LLM。先把这两块底座�
 
 - [2.4 为什么 Agent 会失控](/ch2-build-products/agent-failure) — 失控的几种模式、怎么诊断、怎么设计成不容易失控
 - [2.5 AI 系统的评估方法](/ch2-build-products/evaluation) — 用数字判断 Agent 好坏，而不是"碰运气调 Prompt"
+- [2.22 Agent 轨迹评测](/ch2-build-products/agent-evaluation) — 只看最终答案漏掉一半故障，还要评"它是怎么走过来的" ⭐
+- [2.21 Agent 安全：Prompt Injection 进阶威胁](/ch2-build-products/agent-security) — Agent 能调工具后，注入攻击从"骗话"升级成"骗它动手"
 - [2.8 成本估算实操](/ch2-build-products/cost-estimation) — Agent 多步调用很烧钱，先算清楚账
 
 ## ④ 实战：从零搭一个完整 Agent ⭐
@@ -55,13 +58,16 @@ Agent = 会自己调工具、能记住上下文的 LLM。先把这两块底座�
 - [4.9 上下文工程](/ch4-agent-mcp/context-engineering) — 按需注入、压缩、隔离、用文件系统当外部记忆
 - [4.6 多 Agent 协作](/ch4-agent-mcp/multi-agent) — Orchestrator-Subagent、Handoff、共享状态
 - [4.7 AI 编程实战工作流](/ch4-agent-mcp/ai-coding-workflow) · [4.4 Claude Code 深度使用](/ch4-agent-mcp/claude-code) — 把 Agent 用在真实开发里
-- [4.15 角色演进](/ch4-agent-mcp/engineer-roles) → [4.16 Graph 编排深入](/ch4-agent-mcp/graph-engineering) → [4.17 极简 Harness 解剖：Pi](/ch4-agent-mcp/pi-harness) — 从"带 AI 干活"到"设计 Agent 系统与工具"
+- [4.15 角色演进](/ch4-agent-mcp/engineer-roles) → [4.16 Graph 编排深入](/ch4-agent-mcp/graph-engineering) — 从"带 AI 干活"到"设计 Agent 系统与工具"
+- **Pi 源码解剖系列**：[4.17 设计哲学](/ch4-agent-mcp/pi-harness) → [4.18 四层架构](/ch4-agent-mcp/pi-source-architecture) → [4.19 Agent Loop](/ch4-agent-mcp/pi-source-agent-loop) → [4.20 工具系统](/ch4-agent-mcp/pi-source-tools) → [4.21 消息与会话树](/ch4-agent-mcp/pi-source-session-tree) → [4.22 扩展系统](/ch4-agent-mcp/pi-source-extensions) — 把一个极简 Harness 从头读到尾，看这些理念怎么落成真实代码
+- [4.25 Agent 系统的六条不变量](/ch4-agent-mcp/agent-invariants) — 把上面所有源码细节收敛成 6 条"破了就出事"的硬约束，自己写 Harness 的检查表 ⭐
 
 ## ⑥ 生态：给 Agent 接上更多能力
 
 让 Agent 能用外部工具、封装可复用的能力。
 
 - [4.1 MCP 是什么，为什么重要](/ch4-agent-mcp/) → [4.2 用现有 MCP](/ch4-agent-mcp/use-mcp) → [4.3 自己写 MCP](/ch4-agent-mcp/build-mcp) — 给 Agent 标准化地接外部能力
+- [4.23 Agent 协议全景：MCP / A2A / AG-UI / Skills](/ch4-agent-mcp/agent-protocols) — 一图看清各协议分管什么，别把它们当竞品
 - [5.6–5.9 MCP 进阶](/ch5-deep-dives/mcp-capabilities) · [5.10–5.12 Skill](/ch5-deep-dives/skills-intro) — 能力的生产化与可复用封装
 
 ---
@@ -70,7 +76,7 @@ Agent = 会自己调工具、能记住上下文的 LLM。先把这两块底座�
 
 1. Agent 内容分布在第 1/2/4 章，主线顺序：**工具/记忆基础 → 循环与模式 → 可靠性 → 端到端实战 → Harness/上下文/多 Agent → MCP/Skill 生态**
 2. 最小闭环只需 ①②④：搞懂 Tool Use + Agent 循环，就能跑通 [2.11 实战项目](/ch2-build-products/capstone)
-3. 想做"能扛长任务、不跑偏"的 Agent，真正的功夫在第 ⑤ 步的 [Harness](/ch4-agent-mcp/harness-engineering) 和 [上下文工程](/ch4-agent-mcp/context-engineering)
+3. 想做"能扛长任务、不跑偏"的 Agent，真正的功夫在第 ⑤ 步的 [Harness](/ch4-agent-mcp/harness-engineering) 和 [上下文工程](/ch4-agent-mcp/context-engineering)；想吃透实现，跟着 [Pi 源码解剖](/ch4-agent-mcp/pi-harness) 读一遍，再用 [六条不变量](/ch4-agent-mcp/agent-invariants) 当检查表
 4. 要给 Agent 扩外部能力，走 MCP/Skill 生态（第 ⑥ 步）
 
 ---
